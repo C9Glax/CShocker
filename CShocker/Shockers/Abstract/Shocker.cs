@@ -8,7 +8,7 @@ public abstract class Shocker
     public readonly List<string> ShockerIds;
     public readonly IntensityRange IntensityRange;
     public readonly DurationRange DurationRange;
-    protected readonly ILogger? Logger;
+    protected ILogger? Logger;
     
     public void Control(ControlAction action, string? shockerId = null, int? intensity = null, int? duration = null)
     {
@@ -31,6 +31,11 @@ public abstract class Shocker
         this.ShockerIds = shockerIds;
         this.IntensityRange = intensityRange;
         this.DurationRange = durationRange;
+        this.Logger = logger;
+    }
+
+    public void SetLogger(ILogger? logger)
+    {
         this.Logger = logger;
     }
 }
