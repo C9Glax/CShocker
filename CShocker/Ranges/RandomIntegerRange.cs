@@ -2,7 +2,7 @@
 
 public abstract class RandomIntegerRange
 {
-    public Range _range { get; init; }
+    public Range Range { get; init; }
     internal RandomIntegerRange(Range range, Range limits)
     {
         if (range.Max - range.Min < 0)
@@ -11,11 +11,11 @@ public abstract class RandomIntegerRange
             throw new ArgumentOutOfRangeException(nameof(limits.Min), "Min has to be withing Range 0-100");
         if (range.Max < limits.Min || range.Max > limits.Max)
             throw new ArgumentOutOfRangeException(nameof(range.Max), "Max has to be withing Range 0-100");
-        this._range = range;
+        this.Range = range;
     }
 
     public int GetRandomRangeValue()
     {
-        return Random.Shared.Next(_range.Min, _range.Max);
+        return Random.Shared.Next(Range.Min, Range.Max);
     }
 }
