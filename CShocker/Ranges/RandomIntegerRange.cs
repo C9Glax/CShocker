@@ -14,7 +14,7 @@ public abstract class RandomIntegerRange
         this._range = range;
     }
 
-    internal int GetRandomRangeValue()
+    public int GetRandomRangeValue()
     {
         return Random.Shared.Next(_range.Min, _range.Max);
     }
