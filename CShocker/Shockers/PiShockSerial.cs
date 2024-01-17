@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CShocker.Shockers;
 
-internal class PiShockSerial : SerialShocker
+public class PiShockSerial : SerialShocker
 {
     public PiShockSerial(SerialShockerSettings shockerSettings, ILogger? logger = null) : base(shockerSettings, logger)
     {

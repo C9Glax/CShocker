@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CShocker.Shockers;
 
-internal class OpenShockHttp : HttpShocker
+public class OpenShockHttp : HttpShocker
 {
     protected override void ControlInternal(ControlAction action, string shockerId, int intensity, int duration)
     {

@@ -7,7 +7,7 @@
         <Authors>Glax</Authors>
         <RepositoryUrl>https://github.com/C9Glax/CShocker</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <Version>1.0.2</Version>
+        <Version>1.0.3</Version>
     </PropertyGroup>
 
     <ItemGroup>

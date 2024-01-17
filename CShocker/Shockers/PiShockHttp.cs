@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CShocker.Shockers;
 
-internal class PiShockHttp : HttpShocker
+public class PiShockHttp : HttpShocker
 {
     public PiShockHttp(HttpShockerSettings settings, ILogger? logger = null) : base(settings, logger)
     {

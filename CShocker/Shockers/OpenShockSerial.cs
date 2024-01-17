@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CShocker.Shockers;
 
-internal class OpenShockSerial : SerialShocker
+public class OpenShockSerial : SerialShocker
 {
     public OpenShockSerial(SerialShockerSettings shockerSettings, ILogger? logger = null) : base(shockerSettings, logger)
     {

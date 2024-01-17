@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 namespace CShocker.Shockers.Abstract
 ;
 
-internal abstract class Shocker
+public abstract class Shocker
 {
     protected readonly AShockerSettings ShockerSettings;
     protected readonly ILogger? Logger;

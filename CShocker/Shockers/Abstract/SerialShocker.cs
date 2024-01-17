@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CShocker.Shockers.Abstract;
 
-internal abstract class SerialShocker : Shocker
+public abstract class SerialShocker : Shocker
 {
     protected SerialShocker(SerialShockerSettings shockerSettings, ILogger? logger = null) : base(shockerSettings, logger)
     {
