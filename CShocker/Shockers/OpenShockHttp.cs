@@ -1,16 +1,17 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
+using CShocker.Ranges;
 using CShocker.Shockers.Abstract;
-using CShocker.Shockers.ShockerSettings;
 using Microsoft.Extensions.Logging;
 
 namespace CShocker.Shockers;
 
 public class OpenShockHttp : HttpShocker
 {
+    
     protected override void ControlInternal(ControlAction action, string shockerId, int intensity, int duration)
     {
-        HttpRequestMessage request = new (HttpMethod.Post, $"{((HttpShockerSettings)ShockerSettings).Endpoint}/1/shockers/control")
+        HttpRequestMessage request = new (HttpMethod.Post, $"{Endpoint}/1/shockers/control")
         {
             Headers =
             {
@@ -24,8 +25,8 @@ public class OpenShockHttp : HttpShocker
                                         $"\"duration\": {duration}"+
                                         "}]", Encoding.UTF8, new MediaTypeHeaderValue("application/json"))
         };
-        request.Headers.Add("OpenShockToken", ((HttpShockerSettings)ShockerSettings).ApiKey);
-        HttpResponseMessage response = ((HttpShockerSettings)ShockerSettings).HttpClient.Send(request);
+        request.Headers.Add("OpenShockToken", ApiKey);
+        HttpResponseMessage response = (HttpClient.Send(request));
         this.Logger?.Log(LogLevel.Debug, $"{request.RequestUri} response: {response.StatusCode}");
     }
 
@@ -40,8 +41,7 @@ public class OpenShockHttp : HttpShocker
         };
     }
 
-    internal OpenShockHttp(HttpShockerSettings settings, ILogger? logger = null) : base(settings, logger)
+    public OpenShockHttp(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, string endpoint, string apiKey, ILogger? logger = null) : base(shockerIds, intensityRange, durationRange, endpoint, apiKey, logger)
     {
-        
     }
 }
