@@ -22,9 +22,9 @@ public class ShockerJsonConverter : JsonConverter
         {
             case ShockerApi.OpenShockHttp:
                 return new OpenShockHttp(
-                    jo.SelectToken("ShockerIds")!.Value<List<string>>()!,
-                    jo.SelectToken("IntensityRange")!.Value<IntensityRange>()!,
-                    jo.SelectToken("DurationRange")!.Value<DurationRange>()!,
+                    jo.SelectToken("ShockerIds")!.ToObject<List<string>>()!,
+                    jo.SelectToken("IntensityRange")!.ToObject<IntensityRange>()!,
+                    jo.SelectToken("DurationRange")!.ToObject<DurationRange>()!,
                     jo.SelectToken("Endpoint")!.Value<string>()!,
                     jo.SelectToken("ApiKey")!.Value<string>()!
                 );
