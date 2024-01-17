@@ -2,7 +2,7 @@
 
 public abstract class RandomIntegerRange
 {
-    private readonly Range _range;
+    public Range _range { get; init; }
     internal RandomIntegerRange(Range range, Range limits)
     {
         if (range.Max - range.Min < 0)
