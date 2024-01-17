@@ -2,20 +2,21 @@
 
 public abstract class RandomIntegerRange
 {
-    public Range Range { get; init; }
-    internal RandomIntegerRange(Range range, Range limits)
+    public short Min, Max;
+    internal RandomIntegerRange(short min, short max, short minLimit, short maxLimit)
     {
-        if (range.Max - range.Min < 0)
+        if (max - min < 0)
             throw new ArgumentException("Min has to be less or equal Max");
-        if (range.Min < limits.Min || range.Min > limits.Max)
-            throw new ArgumentOutOfRangeException(nameof(limits.Min), "Min has to be withing Range 0-100");
-        if (range.Max < limits.Min || range.Max > limits.Max)
-            throw new ArgumentOutOfRangeException(nameof(range.Max), "Max has to be withing Range 0-100");
-        this.Range = range;
+        if (min < minLimit || min > maxLimit)
+            throw new ArgumentOutOfRangeException(nameof(min), $"Min has to be withing Range {minLimit}-{maxLimit}");
+        if (max < minLimit || max > maxLimit)
+            throw new ArgumentOutOfRangeException(nameof(max), $"Max has to be withing Range {minLimit}-{maxLimit}");
+        this.Min = min;
+        this.Max = max;
     }
 
     public int GetRandomRangeValue()
     {
-        return Random.Shared.Next(Range.Min, Range.Max);
+        return Random.Shared.Next(this.Min, this.Max);
     }
 }

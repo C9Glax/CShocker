@@ -9,7 +9,7 @@ public abstract class HttpShocker : Shocker
     public string Endpoint { get; init; }
     public string ApiKey { get; init; }
 
-    protected HttpShocker(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, string endpoint, string apiKey, ILogger? logger = null) : base(shockerIds, intensityRange, durationRange, logger)
+    protected HttpShocker(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, string endpoint, string apiKey, ShockerApi apiType, ILogger? logger = null) : base(shockerIds, intensityRange, durationRange, apiType, logger)
     {
         Endpoint = endpoint;
         ApiKey = apiKey;

@@ -1,4 +1,5 @@
-﻿using CShocker.Ranges;
+﻿using System.Reflection.Metadata;
+using CShocker.Ranges;
 using Microsoft.Extensions.Logging;
 
 namespace CShocker.Shockers.Abstract;
@@ -9,6 +10,7 @@ public abstract class Shocker
     public readonly IntensityRange IntensityRange;
     public readonly DurationRange DurationRange;
     protected ILogger? Logger;
+    public readonly ShockerApi ApiType;
     
     public void Control(ControlAction action, string? shockerId = null, int? intensity = null, int? duration = null)
     {
@@ -26,11 +28,12 @@ public abstract class Shocker
     
     protected abstract void ControlInternal(ControlAction action, string shockerId, int intensity, int duration);
 
-    protected Shocker(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, ILogger? logger = null)
+    protected Shocker(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, ShockerApi apiType, ILogger? logger = null)
     {
         this.ShockerIds = shockerIds;
         this.IntensityRange = intensityRange;
         this.DurationRange = durationRange;
+        this.ApiType = apiType;
         this.Logger = logger;
     }
 

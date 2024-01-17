@@ -2,7 +2,7 @@
 
 public class IntensityRange : RandomIntegerRange
 {
-    public IntensityRange(Range range) : base(range, new Range(0, 100))
+    public IntensityRange(short min, short max) : base(min , max, 0, 100)
     {
         
     }

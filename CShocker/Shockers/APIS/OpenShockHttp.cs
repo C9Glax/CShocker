@@ -4,7 +4,7 @@ using CShocker.Ranges;
 using CShocker.Shockers.Abstract;
 using Microsoft.Extensions.Logging;
 
-namespace CShocker.Shockers;
+namespace CShocker.Shockers.APIS;
 
 public class OpenShockHttp : HttpShocker
 {
@@ -41,7 +41,7 @@ public class OpenShockHttp : HttpShocker
         };
     }
 
-    public OpenShockHttp(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, string endpoint, string apiKey, ILogger? logger = null) : base(shockerIds, intensityRange, durationRange, endpoint, apiKey, logger)
+    public OpenShockHttp(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, string endpoint, string apiKey, ILogger? logger = null) : base(shockerIds, intensityRange, durationRange, endpoint, apiKey, ShockerApi.OpenShockHttp, logger)
     {
     }
 }

@@ -2,11 +2,11 @@
 using CShocker.Shockers.Abstract;
 using Microsoft.Extensions.Logging;
 
-namespace CShocker.Shockers;
+namespace CShocker.Shockers.APIS;
 
 public class PiShockHttp : HttpShocker
 {
-    public PiShockHttp(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, string endpoint, string apiKey, ILogger? logger = null) : base(shockerIds, intensityRange, durationRange, endpoint, apiKey, logger)
+    public PiShockHttp(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, string endpoint, string apiKey, ILogger? logger = null) : base(shockerIds, intensityRange, durationRange, endpoint, apiKey, ShockerApi.PiShockHttp, logger)
     {
         throw new NotImplementedException();
     }

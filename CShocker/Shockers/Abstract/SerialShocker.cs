@@ -5,7 +5,7 @@ namespace CShocker.Shockers.Abstract;
 
 public abstract class SerialShocker : Shocker
 {
-    protected SerialShocker(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, ILogger? logger = null) : base(shockerIds, intensityRange, durationRange, logger)
+    protected SerialShocker(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, ShockerApi apiType, ILogger? logger = null) : base(shockerIds, intensityRange, durationRange, apiType, logger)
     {
     }
 }

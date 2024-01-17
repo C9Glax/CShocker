@@ -2,7 +2,7 @@
 
 public class DurationRange : RandomIntegerRange
 {
-    public DurationRange(Range range) : base(range, new Range(0, 30000))
+    public DurationRange(short min, short max) : base(min ,max , 0, 30000)
     {
         
     }
