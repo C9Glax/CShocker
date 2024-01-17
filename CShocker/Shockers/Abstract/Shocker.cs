@@ -5,9 +5,9 @@ namespace CShocker.Shockers.Abstract;
 
 public abstract class Shocker
 {
-    protected readonly List<string> ShockerIds;
-    protected readonly IntensityRange IntensityRange;
-    protected readonly DurationRange DurationRange;
+    public readonly List<string> ShockerIds;
+    public readonly IntensityRange IntensityRange;
+    public readonly DurationRange DurationRange;
     protected readonly ILogger? Logger;
     
     public void Control(ControlAction action, string? shockerId = null, int? intensity = null, int? duration = null)
