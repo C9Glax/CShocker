@@ -8,9 +8,7 @@ internal abstract class Shocker
 {
     protected readonly AShockerSettings ShockerSettings;
     protected readonly ILogger? Logger;
-
-    internal enum ControlAction { Beep, Vibrate, Shock, Nothing }
-
+    
     internal void Control(ControlAction action, string? shockerId = null, int? intensity = null, int? duration = null)
     {
         int i = intensity ?? ShockerSettings.Intensity.GetRandomRangeValue();
