@@ -41,4 +41,12 @@ public abstract class Shocker
     {
         this.Logger = logger;
     }
+
+    public override string ToString()
+    {
+        return $"ShockerType: {Enum.GetName(typeof(ShockerApi), this.ApiType)}\n" +
+               $"Shocker-IDs: {string.Join(", ", this.ShockerIds)}\n" +
+               $"IntensityRange: {IntensityRange}\n" +
+               $"DurationRange: {DurationRange}";
+    }
 }

@@ -14,4 +14,11 @@ public abstract class HttpShocker : Shocker
         Endpoint = endpoint;
         ApiKey = apiKey;
     }
+
+    public override string ToString()
+    {
+        return $"{base.ToString()}\n" +
+               $"Endpoint: {Endpoint}\n" +
+               $"ApiKey: {ApiKey}";
+    }
 }

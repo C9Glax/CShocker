@@ -19,4 +19,9 @@ public abstract class RandomIntegerRange
     {
         return Random.Shared.Next(this.Min, this.Max);
     }
+
+    public override string ToString()
+    {
+        return $"Min: {Min} Max: {Max}";
+    }
 }
