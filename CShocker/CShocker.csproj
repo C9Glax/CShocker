@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Authors>Glax</Authors>
-        <RepositoryUrl>https://github.com/C9Glax/CShock</RepositoryUrl>
+        <RepositoryUrl>https://github.com/C9Glax/CShocker</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
     </PropertyGroup>
 
