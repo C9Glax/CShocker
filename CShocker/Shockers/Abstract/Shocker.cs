@@ -9,8 +9,6 @@ public abstract class Shocker
     protected readonly IntensityRange IntensityRange;
     protected readonly DurationRange DurationRange;
     protected readonly ILogger? Logger;
-    private static int _shockerNumber = 0;
-    public int ShockerId = _shockerNumber++;
     
     public void Control(ControlAction action, string? shockerId = null, int? intensity = null, int? duration = null)
     {
