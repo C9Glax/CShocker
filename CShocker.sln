@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CShocker", "CShocker\CShocker.csproj", "{244585F2-3AD8-4B3A-B6DA-3B0D3EFB745F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{244585F2-3AD8-4B3A-B6DA-3B0D3EFB745F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{244585F2-3AD8-4B3A-B6DA-3B0D3EFB745F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{244585F2-3AD8-4B3A-B6DA-3B0D3EFB745F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{244585F2-3AD8-4B3A-B6DA-3B0D3EFB745F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
