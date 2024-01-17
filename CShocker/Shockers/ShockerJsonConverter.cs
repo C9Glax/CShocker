@@ -16,7 +16,7 @@ public class ShockerJsonConverter : JsonConverter
     public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
     {
         JObject jo = JObject.Load(reader);
-        ShockerApi? apiType = jo.SelectToken("ApiType")?.Value<ShockerApi>();
+        ShockerApi? apiType = (ShockerApi?)jo.SelectToken("ApiType")?.Value<byte>();
 
         switch (apiType)
         {
