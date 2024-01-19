@@ -15,18 +15,22 @@ public class OpenShockHttp : HttpShocker
         {
             Headers =
             {
-                UserAgent = { new ProductInfoHeaderValue("OpenCS2hock", "1") },
+                UserAgent = { new ProductInfoHeaderValue("CShocker", "1") },
                 Accept = { new MediaTypeWithQualityHeaderValue("application/json") }
             },
-            Content = new StringContent(@"[ { "+
-                                        $"\"id\": \"{shockerId}\"," +
-                                        $"\"type\": {ControlActionToByte(action)},"+
-                                        $"\"intensity\": {intensity},"+
-                                        $"\"duration\": {duration}"+
-                                        "}]", Encoding.UTF8, new MediaTypeHeaderValue("application/json"))
+            Content = new StringContent("{ shocks: ["+
+                                            "{ "+
+                                                $"\"id\": \"{shockerId}\"," +
+                                                $"\"type\": {ControlActionToByte(action)},"+
+                                                $"\"intensity\": {intensity},"+
+                                                $"\"duration\": {duration}"+
+                                            "}" +
+                                            "]," +
+                                            "customName: CShocker" +
+                                        "}", Encoding.UTF8, new MediaTypeHeaderValue("application/json"))
         };
         request.Headers.Add("OpenShockToken", ApiKey);
-        HttpResponseMessage response = (HttpClient.Send(request));
+        HttpResponseMessage response = HttpClient.Send(request);
         this.Logger?.Log(LogLevel.Debug, $"{request.RequestUri} response: {response.StatusCode}");
     }
 
