@@ -12,7 +12,7 @@ public class OpenShockHttp : HttpShocker
 
     public List<string> GetShockers()
     {
-        HttpRequestMessage requestDevices = new (HttpMethod.Post, $"{Endpoint}/2/devices")
+        HttpRequestMessage requestDevices = new (HttpMethod.Get, $"{Endpoint}/2/devices")
         {
             Headers =
             {
@@ -34,7 +34,7 @@ public class OpenShockHttp : HttpShocker
         List<string> shockerIds = new();
         foreach (string deviceId in deviceIds)
         {
-            HttpRequestMessage requestShockers = new (HttpMethod.Post, $"{Endpoint}/2/devices/{deviceId}/shockers")
+            HttpRequestMessage requestShockers = new (HttpMethod.Get, $"{Endpoint}/2/devices/{deviceId}/shockers")
             {
                 Headers =
                 {
