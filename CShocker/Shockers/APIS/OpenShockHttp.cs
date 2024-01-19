@@ -28,8 +28,7 @@ public class OpenShockHttp : HttpShocker
         this.Logger?.Log(LogLevel.Debug, $"{requestDevices.RequestUri} response: {responseDevices.StatusCode}\n{deviceJson}");
         JObject deviceListJObj = JObject.Parse(deviceJson);
         List<string> deviceIds = new();
-        foreach(JToken device in deviceListJObj.SelectTokens("data"))
-            deviceIds.Add(device.SelectToken("id")!.Value<string>()!);
+        deviceIds.AddRange(deviceListJObj["data"]!.Children()["id"].Values<string>()!);
 
         List<string> shockerIds = new();
         foreach (string deviceId in deviceIds)
@@ -49,8 +48,7 @@ public class OpenShockHttp : HttpShocker
             string shockerJson = shockerStreamReader.ReadToEnd();
             this.Logger?.Log(LogLevel.Debug, $"{requestShockers.RequestUri} response: {response.StatusCode}\n{shockerJson}");
             JObject shockerListJObj = JObject.Parse(shockerJson);
-            foreach(JToken shocker in shockerListJObj.SelectTokens("data"))
-                shockerIds.Add(shocker.SelectToken("id")!.Value<string>()!);
+            shockerIds.AddRange(shockerListJObj["data"]!.Children()["id"].Values<string>()!);
             
         }
         return shockerIds;
