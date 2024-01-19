@@ -25,11 +25,20 @@ public class ShockerJsonConverter : JsonConverter
                     jo.SelectToken("ShockerIds")!.ToObject<List<string>>()!,
                     jo.SelectToken("IntensityRange")!.ToObject<IntensityRange>()!,
                     jo.SelectToken("DurationRange")!.ToObject<DurationRange>()!,
-                    jo.SelectToken("Endpoint")!.Value<string>()!,
-                    jo.SelectToken("ApiKey")!.Value<string>()!
+                    jo.SelectToken("ApiKey")!.Value<string>()!,
+                    jo.SelectToken("Endpoint")!.Value<string>()!
                 );
             case ShockerApi.OpenShockSerial:
             case ShockerApi.PiShockHttp:
+                return new PiShockHttp(
+                    jo.SelectToken("ShockerIds")!.ToObject<List<string>>()!,
+                    jo.SelectToken("IntensityRange")!.ToObject<IntensityRange>()!,
+                    jo.SelectToken("DurationRange")!.ToObject<DurationRange>()!,
+                    jo.SelectToken("ApiKey")!.Value<string>()!,
+                    jo.SelectToken("Username")!.Value<string>()!,
+                    jo.SelectToken("ShareCode")!.Value<string>()!,
+                    jo.SelectToken("Endpoint")!.Value<string>()!
+                );
             case ShockerApi.PiShockSerial:
                 throw new NotImplementedException();
             default:
