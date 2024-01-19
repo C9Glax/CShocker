@@ -45,7 +45,7 @@ public class OpenShockHttp : HttpShocker
         };
     }
 
-    public OpenShockHttp(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, string endpoint, string apiKey, ILogger? logger = null) : base(shockerIds, intensityRange, durationRange, endpoint, apiKey, ShockerApi.OpenShockHttp, logger)
+    public OpenShockHttp(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, string apiKey, string endpoint = "https://api.shocklink.net", ILogger? logger = null) : base(shockerIds, intensityRange, durationRange, endpoint, apiKey, ShockerApi.OpenShockHttp, logger)
     {
     }
 }
