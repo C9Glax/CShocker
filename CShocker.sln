@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CShocker", "CShocker\CShocker.csproj", "{244585F2-3AD8-4B3A-B6DA-3B0D3EFB745F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{3C3879F1-AB10-41C7-BF1A-3C1DA850970B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{244585F2-3AD8-4B3A-B6DA-3B0D3EFB745F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{244585F2-3AD8-4B3A-B6DA-3B0D3EFB745F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{244585F2-3AD8-4B3A-B6DA-3B0D3EFB745F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C3879F1-AB10-41C7-BF1A-3C1DA850970B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C3879F1-AB10-41C7-BF1A-3C1DA850970B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C3879F1-AB10-41C7-BF1A-3C1DA850970B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C3879F1-AB10-41C7-BF1A-3C1DA850970B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
