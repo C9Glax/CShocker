@@ -16,7 +16,7 @@ public class OpenShockSerial : SerialShocker
 
     protected override void ControlInternal(ControlAction action, string shockerId, int intensity, int duration)
     {
-        string json = "{" +
+        string json = "rftransmit {" +
                         $"\"model\":\"{Enum.GetName(Model[shockerId])!.ToLower()}\"," +
                         $"\"id\":{shockerId}," +
                         $"\"type\":\"{ControlActionToString(action)}\"," +
