@@ -6,6 +6,7 @@ namespace CShocker.Shockers.Abstract;
 
 public abstract class Shocker
 {
+    // ReSharper disable 4 times MemberCanBePrivate.Global external use
     public readonly List<string> ShockerIds;
     public readonly IntensityRange IntensityRange;
     public readonly DurationRange DurationRange;

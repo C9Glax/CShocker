@@ -7,6 +7,7 @@ namespace CShocker.Shockers.APIS;
 
 public class OpenShockSerial : SerialShocker
 {
+    // ReSharper disable once MemberCanBePrivate.Global external usage
     public readonly Dictionary<string, ShockerModel> Model;
     private const int BaudRate = 115200;
     public OpenShockSerial(Dictionary<string, ShockerModel> shockerIds, IntensityRange intensityRange, DurationRange durationRange, SerialPortInfo serialPortI, ILogger? logger = null) : base(shockerIds.Keys.ToList(), intensityRange, durationRange, serialPortI, BaudRate, ShockerApi.OpenShockSerial, logger)
@@ -23,7 +24,7 @@ public class OpenShockSerial : SerialShocker
                         $"\"intensity\":{intensity}," +
                         $"\"durationMs\":{duration}" +
                       "}";
-        serialPort.WriteLine(json);
+        SerialPort.WriteLine(json);
     }
 
     public Dictionary<string, ShockerModel> GetShockers()
@@ -31,8 +32,8 @@ public class OpenShockSerial : SerialShocker
         Dictionary<string, ShockerModel> ret = new();
         Regex shockerRex = new (@".*FetchDeviceInfo\(\): \[GatewayConnectionManager\]   \[[a-z0-9\-]+\] rf=([0-9]{1,5}) model=([0,1])");
         this.Logger?.Log(LogLevel.Debug, "Restart");
-        serialPort.WriteLine("restart");
-        while (serialPort.ReadLine() is { } line && !line.Contains("Successfully verified auth token"))
+        SerialPort.WriteLine("restart");
+        while (SerialPort.ReadLine() is { } line && !line.Contains("Successfully verified auth token"))
         {
             this.Logger?.Log(LogLevel.Trace, line);
             Match match = shockerRex.Match(line);
@@ -50,7 +51,7 @@ public class OpenShockSerial : SerialShocker
         Petrainer = 1
     }
     
-    private string ControlActionToString(ControlAction action)
+    private static string ControlActionToString(ControlAction action)
     {
         return action switch
         {

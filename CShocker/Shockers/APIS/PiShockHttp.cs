@@ -8,7 +8,9 @@ namespace CShocker.Shockers.APIS;
 
 public class PiShockHttp : HttpShocker
 {
-    public String Username, ShareCode;
+    // ReSharper disable twice MemberCanBePrivate.Global external usage
+    public readonly string Username, ShareCode;
+
     public PiShockHttp(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, string apiKey, string username, string shareCode, string endpoint = "https://do.pishock.com/api/apioperate", ILogger? logger = null) : base(shockerIds, intensityRange, durationRange, apiKey, endpoint, ShockerApi.PiShockHttp, logger)
     {
         this.Username = username;

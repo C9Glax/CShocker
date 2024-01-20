@@ -10,13 +10,13 @@ namespace CShocker.Shockers.Abstract;
 public abstract class SerialShocker : Shocker
 {
     public SerialPortInfo SerialPortI;
-    protected SerialPort serialPort;
+    protected readonly SerialPort SerialPort;
     
     protected SerialShocker(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, SerialPortInfo serialPortI, int baudRate, ShockerApi apiType, ILogger? logger = null) : base(shockerIds, intensityRange, durationRange, apiType, logger)
     {
         this.SerialPortI = serialPortI;
-        this.serialPort = new SerialPort(serialPortI.PortName, baudRate);
-        this.serialPort.Open();
+        this.SerialPort = new SerialPort(serialPortI.PortName, baudRate);
+        this.SerialPort.Open();
     }
 
     [SupportedOSPlatform("windows")]

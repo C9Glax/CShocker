@@ -23,7 +23,7 @@ public class PiShockSerial : SerialShocker
                         $"\"id\": " +
                         "}" +
                       "}";
-        serialPort.WriteLine(json);
+        SerialPort.WriteLine(json);
     }
 
     private static string ControlActionToOp(ControlAction action)

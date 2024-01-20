@@ -6,6 +6,7 @@ namespace CShocker.Shockers.Abstract;
 public abstract class HttpShocker : Shocker
 {
     protected readonly HttpClient HttpClient = new();
+    // ReSharper disable twice MemberCanBeProtected.Global external usage
     public string Endpoint { get; init; }
     public string ApiKey { get; init; }
 
