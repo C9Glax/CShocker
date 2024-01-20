@@ -1,7 +1,8 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Net.Http.Headers;
 using CShocker.Ranges;
 using CShocker.Shockers.Abstract;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace CShocker.Shockers.APIS;
 
@@ -27,27 +28,60 @@ public class OpenShockSerial : SerialShocker
         SerialPort.WriteLine(json);
     }
 
-    public Dictionary<string, ShockerModel> GetShockers()
+    public Dictionary<string, ShockerModel> GetShockers(string apiEndpoint, string apiKey)
     {
-        Dictionary<string, ShockerModel> ret = new();
-        Regex shockerRex = new (@".*FetchDeviceInfo\(\): \[GatewayConnectionManager\]   \[[a-z0-9\-]+\] rf=([0-9]{1,5}) model=([0,1])");
-        this.Logger?.Log(LogLevel.Debug, "Restart");
-        SerialPort.WriteLine("restart");
-        while (SerialPort.ReadLine() is { } line && !line.Contains("Successfully verified auth token"))
+        HttpClient httpClient = new();
+        HttpRequestMessage requestDevices = new (HttpMethod.Get, $"{apiEndpoint}/2/devices")
         {
-            this.Logger?.Log(LogLevel.Trace, line);
-            Match match = shockerRex.Match(line);
-            if (match.Success)
-                ret.Add(match.Groups[1].Value, Enum.Parse<ShockerModel>(match.Groups[2].Value));
-        }
-        this.Logger?.Log(LogLevel.Debug, $"Shockers found: \n\t{string.Join("\n\t", ret)}");
+            Headers =
+            {
+                UserAgent = { new ProductInfoHeaderValue("CShocker", "1") },
+                Accept = { new MediaTypeWithQualityHeaderValue("application/json") }
+            }
+        };
+        requestDevices.Headers.Add("OpenShockToken", apiKey);
+        HttpResponseMessage responseDevices = httpClient.Send(requestDevices);
+        
+        StreamReader deviceStreamReader = new(responseDevices.Content.ReadAsStream());
+        string deviceJson = deviceStreamReader.ReadToEnd();
+        this.Logger?.Log(LogLevel.Debug, $"{requestDevices.RequestUri} response: {responseDevices.StatusCode}\n{deviceJson}");
+        JObject deviceListJObj = JObject.Parse(deviceJson);
+        List<string> deviceIds = new();
+        deviceIds.AddRange(deviceListJObj["data"]!.Children()["id"].Values<string>()!);
 
-        return ret;
+        Dictionary<string, ShockerModel> models = new();
+        foreach (string deviceId in deviceIds)
+        {
+            HttpRequestMessage requestShockers = new (HttpMethod.Get, $"{apiEndpoint}/2/devices/{deviceId}/shockers")
+            {
+                Headers =
+                {
+                    UserAgent = { new ProductInfoHeaderValue("CShocker", "1") },
+                    Accept = { new MediaTypeWithQualityHeaderValue("application/json") }
+                }
+            };
+            requestShockers.Headers.Add("OpenShockToken", apiKey);
+            HttpResponseMessage response = httpClient.Send(requestShockers);
+        
+            StreamReader shockerStreamReader = new(response.Content.ReadAsStream());
+            string shockerJson = shockerStreamReader.ReadToEnd();
+            this.Logger?.Log(LogLevel.Debug, $"{requestShockers.RequestUri} response: {response.StatusCode}\n{shockerJson}");
+            JObject shockerListJObj = JObject.Parse(shockerJson);
+            for (int i = 0; i < shockerListJObj["data"]!.Children().Count(); i++)
+            {
+                models.Add(
+                    shockerListJObj["data"]![i]!["rfId"]!.Value<int>().ToString(),
+                    Enum.Parse<ShockerModel>(shockerListJObj["data"]![i]!["model"]!.Value<string>()!)
+                    );
+            }
+        }
+
+        return models;
     }
 
     public enum ShockerModel : byte
     {
-        Caixianlin = 0,
+        CaiXianlin = 0,
         Petrainer = 1
     }
     
