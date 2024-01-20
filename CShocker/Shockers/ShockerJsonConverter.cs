@@ -29,6 +29,12 @@ public class ShockerJsonConverter : JsonConverter
                     jo.SelectToken("Endpoint")!.Value<string>()!
                 );
             case ShockerApi.OpenShockSerial:
+                return new OpenShockSerial(
+                    jo.SelectToken("Model")!.ToObject<Dictionary<string, OpenShockSerial.ShockerModel>>()!,
+                    jo.SelectToken("IntensityRange")!.ToObject<IntensityRange>()!,
+                    jo.SelectToken("DurationRange")!.ToObject<DurationRange>()!,
+                    jo.SelectToken("SerialPortI")!.ToObject<SerialShocker.SerialPortInfo>()!
+                );
             case ShockerApi.PiShockHttp:
                 return new PiShockHttp(
                     jo.SelectToken("ShockerIds")!.ToObject<List<string>>()!,
