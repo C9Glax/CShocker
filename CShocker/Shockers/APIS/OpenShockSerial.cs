@@ -8,7 +8,6 @@ namespace CShocker.Shockers.APIS;
 
 public class OpenShockSerial : SerialShocker
 {
-    public new List<string> ShockerIds => Model.Keys.ToList();
     // ReSharper disable once MemberCanBePrivate.Global external usage
     public readonly Dictionary<string, ShockerModel> Model;
     private const int BaudRate = 115200;
