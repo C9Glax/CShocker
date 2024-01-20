@@ -2,6 +2,7 @@
 using CShocker.Shockers.Abstract;
 using CShocker.Shockers.APIS;
 using Microsoft.Extensions.Logging;
+using TestApp;
 
 Logger logger = new (LogLevel.Trace);
 

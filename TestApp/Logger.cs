@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 
+namespace TestApp;
+
 public class Logger : ILogger
 {
     private LogLevel _enabledLoglevel;
