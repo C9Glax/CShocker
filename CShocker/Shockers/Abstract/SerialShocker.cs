@@ -41,9 +41,9 @@ public abstract class SerialShocker : Shocker
                 string regEnum  = CUR_CTRL + "Enum\\" + deviceID + "\\Device Parameters";
                 string? portName = Registry.GetValue(regEnum, "PortName", "")?.ToString();
 
-                int s32_Pos = caption.IndexOf(" (COM");
-                if (s32_Pos > 0) // remove COM port from description
-                    caption = caption.Substring(0, s32_Pos);
+                int? s32Pos = caption?.IndexOf(" (COM");
+                if (s32Pos > 0) // remove COM port from description
+                    caption = caption?.Substring(0, (int)s32Pos);
                 
                 ret.Add(new SerialPortInfo(
                     portName,
