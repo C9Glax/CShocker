@@ -63,15 +63,16 @@ public class OpenShockHttp : HttpShocker
                 UserAgent = { new ProductInfoHeaderValue("CShocker", "1") },
                 Accept = { new MediaTypeWithQualityHeaderValue("application/json") }
             },
-            Content = new StringContent("{ shocks: ["+
-                                            "{ "+
-                                                $"\"id\": \"{shockerId}\"," +
-                                                $"\"type\": {ControlActionToByte(action)},"+
-                                                $"\"intensity\": {intensity},"+
-                                                $"\"duration\": {duration}"+
-                                            "}" +
+            Content = new StringContent("{" +
+                                            "\"shocks\": ["+
+                                                "{"+
+                                                    $"\"id\": \"{shockerId}\"," +
+                                                    $"\"type\": {ControlActionToByte(action)},"+
+                                                    $"\"intensity\": {intensity},"+
+                                                    $"\"duration\": {duration}"+
+                                                "}" +
                                             "]," +
-                                            "customName: CShocker" +
+                                            "\"customName\": CShocker" +
                                         "}", Encoding.UTF8, new MediaTypeHeaderValue("application/json"))
         };
         request.Headers.Add("OpenShockToken", ApiKey);
