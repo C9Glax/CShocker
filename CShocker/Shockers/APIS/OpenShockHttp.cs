@@ -26,7 +26,8 @@ public class OpenShockHttp : HttpShocker
         
         StreamReader deviceStreamReader = new(responseDevices.Content.ReadAsStream());
         string deviceJson = deviceStreamReader.ReadToEnd();
-        this.Logger?.Log(LogLevel.Debug, $"{requestDevices.RequestUri} response: {responseDevices.StatusCode}\n{deviceJson}");
+        this.Logger?.Log(!responseDevices.IsSuccessStatusCode ? LogLevel.Critical : LogLevel.Debug,
+            $"{requestDevices.RequestUri} response: {responseDevices.StatusCode}\n{deviceJson}");
         JObject deviceListJObj = JObject.Parse(deviceJson);
         List<string> deviceIds = new();
         deviceIds.AddRange(deviceListJObj["data"]!.Children()["id"].Values<string>()!);
@@ -48,7 +49,8 @@ public class OpenShockHttp : HttpShocker
         
             StreamReader shockerStreamReader = new(response.Content.ReadAsStream());
             string shockerJson = shockerStreamReader.ReadToEnd();
-            this.Logger?.Log(LogLevel.Debug, $"{requestShockers.RequestUri} response: {response.StatusCode}\n{shockerJson}");
+            this.Logger?.Log(!response.IsSuccessStatusCode ? LogLevel.Critical : LogLevel.Debug,
+                $"{requestShockers.RequestUri} response: {response.StatusCode}\n{shockerJson}");
             JObject shockerListJObj = JObject.Parse(shockerJson);
             shockerIds.AddRange(shockerListJObj["data"]!.Children()["id"].Values<string>()!);
             
@@ -78,9 +80,10 @@ public class OpenShockHttp : HttpShocker
                                         "}", Encoding.UTF8, new MediaTypeHeaderValue("application/json"))
         };
         request.Headers.Add("OpenShockToken", ApiKey);
-        this.Logger?.Log(LogLevel.Trace, $"Request-Content: {request.Content}");
+        this.Logger?.Log(LogLevel.Debug, $"Request-Content: {request.Content}");
         HttpResponseMessage response = HttpClient.Send(request);
-        this.Logger?.Log(LogLevel.Debug, $"{request.RequestUri} response: {response.StatusCode}");
+        this.Logger?.Log(!response.IsSuccessStatusCode ? LogLevel.Critical : LogLevel.Debug,
+            $"{request.RequestUri} response: {response.StatusCode}");
     }
 
     private byte ControlActionToByte(ControlAction action)
