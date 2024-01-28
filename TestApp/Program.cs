@@ -7,7 +7,7 @@ using TestApp;
 Logger logger = new (LogLevel.Trace);
 
 #pragma warning disable CA1416
-List<SerialShocker.SerialPortInfo> serialPorts = SerialShocker.GetSerialPorts();
+List<SerialDevice.SerialPortInfo> serialPorts = SerialDevice.GetSerialPorts();
 
 if (serialPorts.Count < 1)
     return;
@@ -25,5 +25,5 @@ while (!int.TryParse(selectedPortStr, out selectedPort) || selectedPort < 0 || s
 }
 
 OpenShockSerial shockSerial = new (new Dictionary<string, OpenShockSerial.ShockerModel>(), new IntensityRange(30,50), new DurationRange(1000,1000), serialPorts[selectedPort], logger);
-Dictionary<string, OpenShockSerial.ShockerModel> shockers = shockSerial.GetShockers("https://api.shocklink.net", "kTXWKQN6dTm3LHy62Pzulf20mh0JLQiLd0zwKJcqNa9MFM0bWXfnf1O3Gzmhgd5o");
+Dictionary<string, OpenShockSerial.ShockerModel> shockers = shockSerial.GetShockers("https://api.shocklink.net", "LOLAPIKEY");
 Console.ReadKey();
