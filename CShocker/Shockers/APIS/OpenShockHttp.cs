@@ -21,6 +21,7 @@ public class OpenShockHttp : HttpShocker
             }
         };
         requestDevices.Headers.Add("OpenShockToken", ApiKey);
+        this.Logger?.Log(LogLevel.Debug, $"Requesting {requestDevices.RequestUri}");
         HttpResponseMessage responseDevices = HttpClient.Send(requestDevices);
         
         StreamReader deviceStreamReader = new(responseDevices.Content.ReadAsStream());
@@ -42,6 +43,7 @@ public class OpenShockHttp : HttpShocker
                 }
             };
             requestShockers.Headers.Add("OpenShockToken", ApiKey);
+            this.Logger?.Log(LogLevel.Debug, $"Requesting {requestShockers.RequestUri}");
             HttpResponseMessage response = HttpClient.Send(requestShockers);
         
             StreamReader shockerStreamReader = new(response.Content.ReadAsStream());
@@ -76,6 +78,7 @@ public class OpenShockHttp : HttpShocker
                                         "}", Encoding.UTF8, new MediaTypeHeaderValue("application/json"))
         };
         request.Headers.Add("OpenShockToken", ApiKey);
+        this.Logger?.Log(LogLevel.Trace, $"Request-Content: {request.Content}");
         HttpResponseMessage response = HttpClient.Send(request);
         this.Logger?.Log(LogLevel.Debug, $"{request.RequestUri} response: {response.StatusCode}");
     }
