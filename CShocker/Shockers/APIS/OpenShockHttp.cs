@@ -56,7 +56,7 @@ public class OpenShockHttp : HttpShocker
     
     protected override void ControlInternal(ControlAction action, string shockerId, int intensity, int duration)
     {
-        HttpRequestMessage request = new (HttpMethod.Post, $"{Endpoint}/1/shockers/control")
+        HttpRequestMessage request = new (HttpMethod.Post, $"{Endpoint}/2/shockers/control")
         {
             Headers =
             {
