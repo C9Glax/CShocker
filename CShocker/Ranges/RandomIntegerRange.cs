@@ -2,7 +2,7 @@
 
 public abstract class RandomIntegerRange
 {
-    public short Min, Max;
+    public readonly short Min, Max;
     internal RandomIntegerRange(short min, short max, short minLimit, short maxLimit)
     {
         if (max - min < 0)
@@ -27,8 +27,16 @@ public abstract class RandomIntegerRange
 
     public override bool Equals(object? obj)
     {
-        return obj is RandomIntegerRange rir &&
-               this.Min == rir.Min &&
-               this.Max == rir.Max;
+        return obj is RandomIntegerRange rir && Equals(rir);
+    }
+
+    private bool Equals(RandomIntegerRange other)
+    {
+        return Min == other.Min && Max == other.Max;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Min, Max);
     }
 }

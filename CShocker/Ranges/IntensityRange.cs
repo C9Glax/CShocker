@@ -11,4 +11,9 @@ public class IntensityRange : RandomIntegerRange
     {
         return obj is IntensityRange && base.Equals(obj);
     }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine("IR", base.GetHashCode());
+    }
 }
