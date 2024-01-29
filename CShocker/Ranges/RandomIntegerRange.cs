@@ -24,4 +24,11 @@ public abstract class RandomIntegerRange
     {
         return $"Min: {Min} Max: {Max}";
     }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is RandomIntegerRange rir &&
+               this.Min == rir.Min &&
+               this.Max == rir.Max;
+    }
 }

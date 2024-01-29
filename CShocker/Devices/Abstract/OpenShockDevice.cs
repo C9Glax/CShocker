@@ -18,7 +18,22 @@ public abstract class OpenShockDevice : Device
         this.Endpoint = endpoint;
         this.ApiKey = apiKey;
     }
-    
+
+    public override bool Equals(object? obj)
+    {
+        return obj is OpenShockDevice osd && Equals(osd);
+    }
+
+    private bool Equals(OpenShockDevice other)
+    {
+        return base.Equals(other) && Endpoint == other.Endpoint && ApiKey == other.ApiKey;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Endpoint, ApiKey);
+    }
+
     public List<OpenShockShocker> GetShockers()
     {
         List<OpenShockShocker> shockers = new();

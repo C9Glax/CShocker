@@ -69,6 +69,21 @@ public abstract class Device : IDisposable
                $"DurationRange: {DurationRange}\n\r";
     }
 
+    public override bool Equals(object? obj)
+    {
+        return obj is Device d && Equals(d);
+    }
+
+    protected bool Equals(Device other)
+    {
+        return IntensityRange.Equals(other.IntensityRange) && DurationRange.Equals(other.DurationRange) && ApiType == other.ApiType;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(IntensityRange, DurationRange, (int)ApiType);
+    }
+
     public void Dispose()
     {
         _workQueue = false;

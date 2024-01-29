@@ -29,4 +29,20 @@ public struct OpenShockShocker : IShocker
                $"Created On: {createdOn}\n" +
                $"Paused: {isPaused}\n\r";
     }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is OpenShockShocker oss && Equals(oss);
+
+    }
+
+    private bool Equals(OpenShockShocker other)
+    {
+        return id == other.id && rfId == other.rfId && model == other.model && createdOn.Equals(other.createdOn);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(id, rfId, (int)model, createdOn);
+    }
 }

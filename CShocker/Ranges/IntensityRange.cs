@@ -6,4 +6,9 @@ public class IntensityRange : RandomIntegerRange
     {
         
     }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is IntensityRange && base.Equals(obj);
+    }
 }
