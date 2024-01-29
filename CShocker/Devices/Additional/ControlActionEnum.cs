@@ -1,4 +1,4 @@
-﻿namespace CShocker.Shockers;
+﻿namespace CShocker.Devices.Additional;
 
 public enum ControlAction
 {

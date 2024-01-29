@@ -1,6 +1,6 @@
-﻿namespace CShocker.Shockers.Abstract;
+﻿namespace CShocker.Devices.Additional;
 
-public enum ShockerApi : byte
+public enum DeviceApi : byte
 {
     OpenShockHttp = 0,
     OpenShockSerial = 1,

@@ -1,24 +1,12 @@
-﻿using System.IO.Ports;
-using CShocker.Ranges;
-using Microsoft.Extensions.Logging;
-using System.Management;
+﻿using System.Management;
 using System.Runtime.Versioning;
+using CShocker.Devices.Abstract;
 using Microsoft.Win32;
 
-namespace CShocker.Shockers.Abstract;
+namespace CShocker.Devices.Additional;
 
-public abstract class SerialShocker : Shocker
+public static class SerialHelper
 {
-    public SerialPortInfo SerialPortI;
-    protected readonly SerialPort SerialPort;
-    
-    protected SerialShocker(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, SerialPortInfo serialPortI, int baudRate, ShockerApi apiType, ILogger? logger = null) : base(shockerIds, intensityRange, durationRange, apiType, logger)
-    {
-        this.SerialPortI = serialPortI;
-        this.SerialPort = new SerialPort(serialPortI.PortName, baudRate);
-        this.SerialPort.Open();
-    }
-
     [SupportedOSPlatform("windows")]
     public static List<SerialPortInfo> GetSerialPorts()
     {
@@ -56,22 +44,4 @@ public abstract class SerialShocker : Shocker
         return ret;
     }
 
-    public class SerialPortInfo
-    {
-        public readonly string? PortName, Description, Manufacturer, DeviceID;
-
-        public SerialPortInfo(string? portName, string? description, string? manufacturer, string? deviceID)
-        {
-            this.PortName = portName;
-            this.Description = description;
-            this.Manufacturer = manufacturer;
-            this.DeviceID = deviceID;
-        }
-
-        public override string ToString()
-        {
-            return
-                $"PortName: {PortName}\nDescription: {Description}\nManufacturer: {Manufacturer}\nDeviceID: {DeviceID}";
-        }
-    }
 }

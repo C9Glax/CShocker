@@ -1,18 +1,26 @@
-﻿using CShocker.Ranges;
+﻿using System.IO.Ports;
+using CShocker.Devices.Abstract;
+using CShocker.Devices.Additional;
+using CShocker.Ranges;
 using CShocker.Shockers.Abstract;
 using Microsoft.Extensions.Logging;
 
-namespace CShocker.Shockers.APIS;
+namespace CShocker.Devices;
 
-public class PiShockSerial : SerialShocker
+public class PiShockSerial : PiShockDevice
 {
     private const int BaudRate = 115200;
-    public PiShockSerial(List<string> shockerIds, IntensityRange intensityRange, DurationRange durationRange, SerialPortInfo serialPortI, ILogger? logger = null) : base(shockerIds, intensityRange, durationRange, serialPortI, BaudRate, ShockerApi.PiShockSerial, logger)
+    public SerialPortInfo SerialPortI;
+    private readonly SerialPort _serialPort;
+    
+    public PiShockSerial(IntensityRange intensityRange, DurationRange durationRange, DeviceApi apiType, SerialPortInfo serialPortI, ILogger? logger = null) : base(intensityRange, durationRange, apiType, logger)
     {
+        this.SerialPortI = serialPortI;
+        this._serialPort = new SerialPort(this.SerialPortI.PortName, BaudRate);
         throw new NotImplementedException();
     }
-
-    protected override void ControlInternal(ControlAction action, string shockerId, int intensity, int duration)
+    
+    protected override void ControlInternal(ControlAction action, IShocker shocker, int intensity, int duration)
     {
         string json = "{" +
                       "\"cmd\": \"operate\"," +
@@ -23,7 +31,7 @@ public class PiShockSerial : SerialShocker
                         $"\"id\": " +
                         "}" +
                       "}";
-        SerialPort.WriteLine(json);
+        _serialPort.WriteLine(json);
     }
 
     private static string ControlActionToOp(ControlAction action)
