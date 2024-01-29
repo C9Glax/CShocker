@@ -38,7 +38,6 @@ public abstract class Device : IDisposable
 
     protected Device(IntensityRange intensityRange, DurationRange durationRange, DeviceApi apiType, ILogger? logger = null)
     {
-        Thread workQueueThread;
         this.IntensityRange = intensityRange;
         this.DurationRange = durationRange;
         this.ApiType = apiType;
