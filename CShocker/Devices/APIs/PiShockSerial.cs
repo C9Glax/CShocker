@@ -5,9 +5,9 @@ using CShocker.Ranges;
 using CShocker.Shockers.Abstract;
 using Microsoft.Extensions.Logging;
 
-namespace CShocker.Devices;
+namespace CShocker.Devices.APIs;
 
-public class PiShockSerial : PiShockDevice
+public class PiShockSerial : PiShockApi
 {
     private const int BaudRate = 115200;
     public SerialPortInfo SerialPortI;
@@ -20,7 +20,7 @@ public class PiShockSerial : PiShockDevice
         throw new NotImplementedException();
     }
     
-    protected override void ControlInternal(ControlAction action, IShocker shocker, int intensity, int duration)
+    protected override void ControlInternal(ControlAction action, Shocker shocker, int intensity, int duration)
     {
         string json = "{" +
                       "\"cmd\": \"operate\"," +

@@ -1,8 +1,9 @@
-﻿using CShocker.Shockers.Abstract;
+﻿using CShocker.Devices.Abstract;
+using CShocker.Shockers.Abstract;
 
 namespace CShocker.Shockers;
 
-public struct PiShockShocker : IShocker
+public class PiShockShocker : Shocker
 {
     public string Code;
 
@@ -19,5 +20,12 @@ public struct PiShockShocker : IShocker
     public override int GetHashCode()
     {
         return Code.GetHashCode();
+    }
+
+    public PiShockShocker(Api api, string code) : base(api)
+    {
+        if (api is not PiShockApi)
+            throw new Exception($"API-Type {api.GetType().FullName} is not usable with Shocker {this.GetType().FullName}");
+        Code = code;
     }
 }

@@ -7,13 +7,13 @@ using CShocker.Shockers;
 using CShocker.Shockers.Abstract;
 using Microsoft.Extensions.Logging;
 
-namespace CShocker.Devices;
+namespace CShocker.Devices.APIs;
 
-public class OpenShockHttp : OpenShockDevice
+public class OpenShockHttp : OpenShockApi
 {
     
     
-    protected override void ControlInternal(ControlAction action, IShocker shocker, int intensity, int duration)
+    protected override void ControlInternal(ControlAction action, Shocker shocker, int intensity, int duration)
     {
         if (shocker is not OpenShockShocker openShockShocker)
         {

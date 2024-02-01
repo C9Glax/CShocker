@@ -7,9 +7,9 @@ using CShocker.Shockers;
 using CShocker.Shockers.Abstract;
 using Microsoft.Extensions.Logging;
 
-namespace CShocker.Devices;
+namespace CShocker.Devices.APIs;
 
-public class PiShockHttp : PiShockDevice
+public class PiShockHttp : PiShockApi
 {
     // ReSharper disable twice MemberCanBePrivate.Global external usage
     public string Username, Endpoint, ApiKey;
@@ -22,7 +22,7 @@ public class PiShockHttp : PiShockDevice
         this.ApiKey = apiKey;
     }
 
-    protected override void ControlInternal(ControlAction action, IShocker shocker, int intensity, int duration)
+    protected override void ControlInternal(ControlAction action, Shocker shocker, int intensity, int duration)
     {
         if (shocker is not PiShockShocker piShockShocker)
         {

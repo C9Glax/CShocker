@@ -5,20 +5,20 @@ using Microsoft.Extensions.Logging;
 
 namespace CShocker.Devices.Abstract;
 
-public abstract class Device : IDisposable
+public abstract class Api : IDisposable
 {
     // ReSharper disable 4 times MemberCanBePrivate.Global external use
     public readonly IntensityRange IntensityRange;
     public readonly DurationRange DurationRange;
     protected ILogger? Logger;
     public readonly DeviceApi ApiType;
-    private readonly Queue<ValueTuple<ControlAction, IShocker, int, int>> _queue = new();
+    private readonly Queue<ValueTuple<ControlAction, Shocker, int, int>> _queue = new();
     private bool _workQueue = true;
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
     private readonly Thread _workQueueThread;
     private const short CommandDelay = 50;
     
-    public void Control(ControlAction action, int? intensity = null, int? duration = null, params IShocker[] shockers)
+    internal void Control(ControlAction action, int? intensity = null, int? duration = null, params Shocker[] shockers)
     {
         int i = intensity ?? IntensityRange.GetRandomRangeValue();
         int d = duration ?? DurationRange.GetRandomRangeValue();
@@ -27,16 +27,16 @@ public abstract class Device : IDisposable
             this.Logger?.Log(LogLevel.Information, "Doing nothing");
             return;
         }
-        foreach (IShocker shocker in shockers)
+        foreach (Shocker shocker in shockers)
         {
             this.Logger?.Log(LogLevel.Debug, $"Enqueueing {action} {(intensity is not null ? $"Overwrite {i}" : $"{i}")} {(duration is not null ? $"Overwrite {d}" : $"{d}")}");
             _queue.Enqueue(new(action, shocker, i ,d));
         }
     }
     
-    protected abstract void ControlInternal(ControlAction action, IShocker shocker, int intensity, int duration);
+    protected abstract void ControlInternal(ControlAction action, Shocker shocker, int intensity, int duration);
 
-    protected Device(IntensityRange intensityRange, DurationRange durationRange, DeviceApi apiType, ILogger? logger = null)
+    protected Api(IntensityRange intensityRange, DurationRange durationRange, DeviceApi apiType, ILogger? logger = null)
     {
         this.IntensityRange = intensityRange;
         this.DurationRange = durationRange;
@@ -71,10 +71,10 @@ public abstract class Device : IDisposable
 
     public override bool Equals(object? obj)
     {
-        return obj is Device d && Equals(d);
+        return obj is Api d && Equals(d);
     }
 
-    protected bool Equals(Device other)
+    protected bool Equals(Api other)
     {
         return IntensityRange.Equals(other.IntensityRange) && DurationRange.Equals(other.DurationRange) && ApiType == other.ApiType;
     }

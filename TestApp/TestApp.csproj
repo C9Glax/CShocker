@@ -11,4 +11,10 @@
       <ProjectReference Include="..\CShocker\CShocker.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="GlaxLogger">
+        <HintPath>..\..\GlaxLogger\GlaxLogger\bin\Debug\net7.0\GlaxLogger.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

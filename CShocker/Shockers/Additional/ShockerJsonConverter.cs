@@ -1,4 +1,5 @@
-﻿using CShocker.Shockers.Abstract;
+﻿using CShocker.Devices.Abstract;
+using CShocker.Shockers.Abstract;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -8,7 +9,7 @@ public class ShockerJsonConverter : JsonConverter
 {
     public override bool CanConvert(Type objectType)
     {
-        return (objectType == typeof(IShocker));
+        return (objectType == typeof(Shocker));
     }
 
     public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
@@ -16,22 +17,22 @@ public class ShockerJsonConverter : JsonConverter
         JObject jo = JObject.Load(reader);
         if (jo.ContainsKey("model")) //OpenShockShocker
         {
-            return new OpenShockShocker()
-            {
-                name = jo.SelectToken("name")!.Value<string>()!,
-                id = jo.SelectToken("id")!.Value<string>()!,
-                rfId = jo.SelectToken("rfId")!.Value<short>(),
-                model = (OpenShockShocker.OpenShockModel)jo.SelectToken("model")!.Value<byte>(),
-                createdOn = jo.SelectToken("createdOn")!.Value<DateTime>(),
-                isPaused = jo.SelectToken("isPaused")!.Value<bool>()
-            };
+            return new OpenShockShocker(
+                jo.SelectToken("api")!.ToObject<Api>()!,
+                jo.SelectToken("name")!.Value<string>()!,
+                jo.SelectToken("id")!.Value<string>()!,
+                jo.SelectToken("rfId")!.Value<short>(),
+                (OpenShockShocker.OpenShockModel)jo.SelectToken("model")!.Value<byte>(),
+                jo.SelectToken("createdOn")!.Value<DateTime>(),
+                jo.SelectToken("isPaused")!.Value<bool>()
+            );
         }
         else //PiShockShocker
         {
-            return new PiShockShocker()
-            {
-                Code = jo.SelectToken("Code")!.Value<string>()!
-            };
+            return new PiShockShocker(
+                jo.SelectToken("api")!.ToObject<Api>()!,
+                jo.SelectToken("Code")!.Value<string>()!
+            );
         }
         throw new Exception();
     }

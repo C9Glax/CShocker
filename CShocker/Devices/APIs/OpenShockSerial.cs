@@ -6,9 +6,9 @@ using CShocker.Shockers;
 using CShocker.Shockers.Abstract;
 using Microsoft.Extensions.Logging;
 
-namespace CShocker.Devices;
+namespace CShocker.Devices.APIs;
 
-public class OpenShockSerial : OpenShockDevice
+public class OpenShockSerial : OpenShockApi
 {
     private const int BaudRate = 115200;
     public SerialPortInfo SerialPortI;
@@ -18,10 +18,18 @@ public class OpenShockSerial : OpenShockDevice
     {
         this.SerialPortI = serialPortI;
         this._serialPort = new SerialPort(serialPortI.PortName, BaudRate);
-        this._serialPort.Open();
+        try
+        {
+            this._serialPort.Open();
+        }
+        catch (Exception e)
+        {
+            this.Logger?.Log(LogLevel.Error, e.Message);
+            throw;
+        }
     }
 
-    protected override void ControlInternal(ControlAction action, IShocker shocker, int intensity, int duration)
+    protected override void ControlInternal(ControlAction action, Shocker shocker, int intensity, int duration)
     {
         if (shocker is not OpenShockShocker openShockShocker)
         {

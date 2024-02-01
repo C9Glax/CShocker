@@ -1,5 +1,24 @@
-﻿namespace CShocker.Shockers.Abstract;
+﻿using CShocker.Devices.Abstract;
+using CShocker.Devices.Additional;
 
-public interface IShocker
+namespace CShocker.Shockers.Abstract;
+
+public abstract class Shocker : IDisposable
 {
+    public Api Api { get; }
+
+    internal Shocker(Api api)
+    {
+        this.Api = api;
+    }
+
+    public void Control(ControlAction action, int? intensity = null, int? duration = null)
+    {
+        this.Api.Control(action, intensity, duration, this);
+    }
+
+    public void Dispose()
+    {
+        Api.Dispose();
+    }
 }

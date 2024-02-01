@@ -1,15 +1,16 @@
 ﻿using CShocker.Devices.Abstract;
+using CShocker.Devices.APIs;
 using CShocker.Ranges;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace CShocker.Devices.Additional;
 
-public class DeviceJsonConverter : JsonConverter
+public class ApiJsonConverter : JsonConverter
 {
     public override bool CanConvert(Type objectType)
     {
-        return (objectType == typeof(Device));
+        return (objectType == typeof(Api));
     }
 
     public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
