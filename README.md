@@ -12,7 +12,7 @@ public static void Main(string[] args){
     string apiKey = ":)";
     
     OpenShockHttp openShockHttp = new (intensityRange, durationRange, apiKey);
-    OpenShockShocker shocker1 = openShockHttp.GetShockers(apiKey).First();
+    OpenShockShocker shocker1 = openShockHttp.GetShockers().First();
     shocker1.Control(ControlAction.Vibrate, 20, 1000);
     
     shocker1.Dispose();
@@ -20,7 +20,7 @@ public static void Main(string[] args){
     List<SerialPortInfo> serialPorts = SerialHelper.GetSerialPorts();
     int selectedPort = 1;
     OpenShockSerial openShockSerial = new(intensityRange, durationRange, serialPorts[selectedPort], apiKey);
-    OpenShockShocker shocker2 = openShockSerial.GetShockers(apiKey).First();
+    OpenShockShocker shocker2 = openShockSerial.GetShockers().First();
     shocker2.Control(ControlAction.Vibrate, 20, 1000);
     
     shocker2.Dispose();
