@@ -47,7 +47,7 @@ while (!int.TryParse(selectedPortStr, out selectedPort) || selectedPort < 0 || s
 }
 
 OpenShockSerial openShockSerial = new(new IntensityRange(30, 50), new DurationRange(1000, 1000),serialPorts[selectedPort], apiKey, logger: logger);
-OpenShockShocker shocker = openShockSerial.GetShockers(apiKey).First();
+OpenShockShocker shocker = openShockSerial.GetShockers().First();
 shocker.Control(ControlAction.Vibrate, 20, 1000);
 File.WriteAllText("shockers.json", JsonConvert.SerializeObject(shocker));
 OpenShockShocker deserialized = JsonConvert.DeserializeObject<OpenShockShocker>(File.ReadAllText("shockers.json"), new ApiJsonConverter())!;

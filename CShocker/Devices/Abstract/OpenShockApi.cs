@@ -35,10 +35,9 @@ public abstract class OpenShockApi : Api
         return HashCode.Combine(Endpoint, ApiKey);
     }
 
-    public List<OpenShockShocker> GetShockers(string apiKey, string apiEndpoint = DefaultEndpoint,
-        ILogger? logger = null)
+    public List<OpenShockShocker> GetShockers()
     {
-        return GetShockers(apiKey, this, apiEndpoint, logger);
+        return GetShockers(this.ApiKey, this, this.Endpoint, this.Logger);
     }
 
     public static List<OpenShockShocker> GetShockers(string apiKey, OpenShockApi api, string apiEndpoint = DefaultEndpoint, ILogger? logger = null)
