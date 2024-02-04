@@ -1,5 +1,4 @@
-﻿using CShocker.Devices.Abstract;
-using CShocker.Devices.Additional;
+﻿using CShocker.Devices.Additional;
 using CShocker.Devices.APIs;
 using CShocker.Ranges;
 using CShocker.Shockers;
@@ -14,9 +13,9 @@ string? apiKey = Console.ReadLine();
 while(apiKey is null || apiKey.Length < 1)
     apiKey = Console.ReadLine();
 
-/*
+
 OpenShockHttp openShockHttp = new (new IntensityRange(30, 50), new DurationRange(1000, 1000), apiKey, logger: logger);
-OpenShockShocker shocker = openShockHttp.GetShockers(apiKey).First();
+OpenShockShocker shocker = openShockHttp.GetShockers().First();
 shocker.Control(ControlAction.Vibrate, 20, 1000);
 
 File.WriteAllText("shockers.json", JsonConvert.SerializeObject(shocker));
@@ -25,9 +24,9 @@ Thread.Sleep(1100); //Wait for previous to end
 deserialized.Control(ControlAction.Vibrate, 20, 1000);
 shocker.Dispose();
 deserialized.Dispose();
-*/
 
 
+/*
 #pragma warning disable CA1416
 List<SerialPortInfo> serialPorts = SerialHelper.GetSerialPorts();
 
@@ -53,5 +52,6 @@ File.WriteAllText("shockers.json", JsonConvert.SerializeObject(shocker));
 OpenShockShocker deserialized = JsonConvert.DeserializeObject<OpenShockShocker>(File.ReadAllText("shockers.json"), new ApiJsonConverter())!;
 shocker.Dispose();
 deserialized.Dispose();
+*/
 
 logger.Dispose();

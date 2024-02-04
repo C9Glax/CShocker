@@ -1,6 +1,5 @@
 ﻿using CShocker.Devices.Abstract;
 using CShocker.Devices.APIs;
-using CShocker.Ranges;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -16,33 +15,16 @@ public class ApiJsonConverter : JsonConverter
     public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
     {
         JObject jo = JObject.Load(reader);
-        DeviceApi? apiType = (DeviceApi?)jo.SelectToken("ApiType")?.Value<byte>();
-
+        DeviceApi apiType = (DeviceApi)jo.SelectToken("ApiType")!.Value<byte>();
+        
         switch (apiType)
         {
             case DeviceApi.OpenShockHttp:
-                return new OpenShockHttp(
-                    jo.SelectToken("IntensityRange")!.ToObject<IntensityRange>()!,
-                    jo.SelectToken("DurationRange")!.ToObject<DurationRange>()!,
-                    jo.SelectToken("ApiKey")!.Value<string>()!,
-                    jo.SelectToken("Endpoint")!.Value<string>()!
-                );
+                return jo.ToObject<OpenShockHttp>()!;
             case DeviceApi.OpenShockSerial:
-                return new OpenShockSerial(
-                    jo.SelectToken("IntensityRange")!.ToObject<IntensityRange>()!,
-                    jo.SelectToken("DurationRange")!.ToObject<DurationRange>()!,
-                    jo.SelectToken("SerialPortI")!.ToObject<SerialPortInfo>()!,
-                    jo.SelectToken("ApiKey")!.Value<string>()!,
-                    jo.SelectToken("Endpoint")!.Value<string>()!
-                );
+                return jo.ToObject<OpenShockSerial>()!;
             case DeviceApi.PiShockHttp:
-                return new PiShockHttp(
-                    jo.SelectToken("IntensityRange")!.ToObject<IntensityRange>()!,
-                    jo.SelectToken("DurationRange")!.ToObject<DurationRange>()!,
-                    jo.SelectToken("ApiKey")!.Value<string>()!,
-                    jo.SelectToken("Username")!.Value<string>()!,
-                    jo.SelectToken("Endpoint")!.Value<string>()!
-                );
+                return jo.ToObject<PiShockHttp>()!;
             case DeviceApi.PiShockSerial:
                 throw new NotImplementedException();
             default:

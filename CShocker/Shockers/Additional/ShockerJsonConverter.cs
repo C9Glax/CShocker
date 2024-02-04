@@ -1,5 +1,4 @@
-﻿using CShocker.Devices.Abstract;
-using CShocker.Shockers.Abstract;
+﻿using CShocker.Shockers.Abstract;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -17,22 +16,11 @@ public class ShockerJsonConverter : JsonConverter
         JObject jo = JObject.Load(reader);
         if (jo.ContainsKey("model")) //OpenShockShocker
         {
-            return new OpenShockShocker(
-                jo.SelectToken("api")!.ToObject<Api>()!,
-                jo.SelectToken("name")!.Value<string>()!,
-                jo.SelectToken("id")!.Value<string>()!,
-                jo.SelectToken("rfId")!.Value<short>(),
-                (OpenShockShocker.OpenShockModel)jo.SelectToken("model")!.Value<byte>(),
-                jo.SelectToken("createdOn")!.Value<DateTime>(),
-                jo.SelectToken("isPaused")!.Value<bool>()
-            );
+            return jo.ToObject<OpenShockShocker>(serializer)!;
         }
         else //PiShockShocker
         {
-            return new PiShockShocker(
-                jo.SelectToken("api")!.ToObject<Api>()!,
-                jo.SelectToken("Code")!.Value<string>()!
-            );
+            return jo.ToObject<PiShockShocker>(serializer)!;
         }
         throw new Exception();
     }
