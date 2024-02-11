@@ -8,8 +8,6 @@ namespace CShocker.Devices.Abstract;
 public abstract class Api : IDisposable
 {
     // ReSharper disable 4 times MemberCanBePrivate.Global external use
-    public readonly IntensityRange IntensityRange;
-    public readonly DurationRange DurationRange;
     protected ILogger? Logger;
     public readonly DeviceApi ApiType;
     private readonly Queue<ValueTuple<ControlAction, Shocker, int, int>> _queue = new();
@@ -17,31 +15,46 @@ public abstract class Api : IDisposable
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
     private readonly Thread _workQueueThread;
     private const short CommandDelay = 50;
+    public IntegerRange ValidIntensityRange, ValidDurationRange;
     
-    internal void Control(ControlAction action, int? intensity = null, int? duration = null, params Shocker[] shockers)
+    internal void Control(ControlAction action, int intensity, int duration, params Shocker[] shockers)
     {
-        int i = intensity ?? IntensityRange.GetRandomRangeValue();
-        int d = duration ?? DurationRange.GetRandomRangeValue();
+        bool enqueueItem = true;
         if (action is ControlAction.Nothing)
         {
-            this.Logger?.Log(LogLevel.Information, "Doing nothing");
+            this.Logger?.Log(LogLevel.Information, "No action defined.");
+            enqueueItem = false;
+        }
+        if (!ValidIntensityRange.ValueWithinLimits(intensity))
+        {
+            this.Logger?.Log(LogLevel.Information, $"Value not within allowed {nameof(intensity)}-Range ({ValidIntensityRange.RangeString()}): {intensity}");
+            enqueueItem = false;
+        }
+        if (!ValidDurationRange.ValueWithinLimits(duration))
+        {
+            this.Logger?.Log(LogLevel.Information, $"Value not within allowed {nameof(duration)}-Range ({ValidIntensityRange.RangeString()}): {duration}");
+            enqueueItem = false;
+        }
+        if (!enqueueItem)
+        {
+            this.Logger?.Log(LogLevel.Information, "Doing nothing.");
             return;
         }
         foreach (Shocker shocker in shockers)
         {
-            this.Logger?.Log(LogLevel.Debug, $"Enqueueing {action} {(intensity is not null ? $"Overwrite {i}" : $"{i}")} {(duration is not null ? $"Overwrite {d}" : $"{d}")}");
-            _queue.Enqueue(new(action, shocker, i ,d));
+            this.Logger?.Log(LogLevel.Debug, $"Enqueueing {action} {intensity} {duration}");
+            _queue.Enqueue(new(action, shocker, intensity, duration));
         }
     }
     
     protected abstract void ControlInternal(ControlAction action, Shocker shocker, int intensity, int duration);
 
-    protected Api(IntensityRange intensityRange, DurationRange durationRange, DeviceApi apiType, ILogger? logger = null)
+    protected Api(DeviceApi apiType, IntegerRange validIntensityRange, IntegerRange validDurationRange, ILogger? logger = null)
     {
-        this.IntensityRange = intensityRange;
-        this.DurationRange = durationRange;
         this.ApiType = apiType;
         this.Logger = logger;
+        this.ValidIntensityRange = validIntensityRange;
+        this.ValidDurationRange = validDurationRange;
         this._workQueueThread = new Thread(QueueThread);
         this._workQueueThread.Start();
     }
@@ -64,9 +77,7 @@ public abstract class Api : IDisposable
 
     public override string ToString()
     {
-        return $"ShockerType: {Enum.GetName(typeof(DeviceApi), this.ApiType)}\n" +
-               $"IntensityRange: {IntensityRange}\n" +
-               $"DurationRange: {DurationRange}\n\r";
+        return $"ShockerType: {Enum.GetName(typeof(DeviceApi), this.ApiType)}\n\r";
     }
 
     public override bool Equals(object? obj)
@@ -76,12 +87,12 @@ public abstract class Api : IDisposable
 
     protected bool Equals(Api other)
     {
-        return IntensityRange.Equals(other.IntensityRange) && DurationRange.Equals(other.DurationRange) && ApiType == other.ApiType;
+        return ApiType == other.ApiType;
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(IntensityRange, DurationRange, (int)ApiType);
+        return HashCode.Combine(ApiType);
     }
 
     public void Dispose()

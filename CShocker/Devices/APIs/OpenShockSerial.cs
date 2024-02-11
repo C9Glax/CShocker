@@ -14,7 +14,7 @@ public class OpenShockSerial : OpenShockApi
     public SerialPortInfo SerialPortI;
     private readonly SerialPort _serialPort;
     
-    public OpenShockSerial(IntensityRange intensityRange, DurationRange durationRange, SerialPortInfo serialPortI, string apiKey, string endpoint = "https://api.shocklink.net", ILogger? logger = null) : base(intensityRange, durationRange, DeviceApi.OpenShockSerial, apiKey, endpoint, logger)
+    public OpenShockSerial(SerialPortInfo serialPortI, string apiKey, string endpoint = "https://api.shocklink.net", ILogger? logger = null) : base(DeviceApi.OpenShockSerial, apiKey, endpoint, logger)
     {
         this.SerialPortI = serialPortI;
         this._serialPort = new SerialPort(serialPortI.PortName, BaudRate);

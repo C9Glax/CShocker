@@ -12,7 +12,7 @@ public abstract class Shocker : IDisposable
         this.Api = api;
     }
 
-    public void Control(ControlAction action, int? intensity = null, int? duration = null)
+    public void Control(ControlAction action, int intensity, int duration)
     {
         this.Api.Control(action, intensity, duration, this);
     }

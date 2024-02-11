@@ -14,7 +14,7 @@ public abstract class OpenShockApi : Api
     public string ApiKey { get; init; }
     private const string DefaultEndpoint = "https://api.shocklink.net";
 
-    public OpenShockApi(IntensityRange intensityRange, DurationRange durationRange, DeviceApi apiType, string apiKey, string endpoint = DefaultEndpoint, ILogger? logger = null) : base(intensityRange, durationRange, apiType, logger)
+    public OpenShockApi(DeviceApi apiType, string apiKey, string endpoint = DefaultEndpoint, ILogger? logger = null) : base(apiType, new IntegerRange(0, 100), new IntegerRange(300, 30000), logger)
     {
         this.Endpoint = endpoint;
         this.ApiKey = apiKey;

@@ -13,7 +13,7 @@ public class PiShockSerial : PiShockApi
     public SerialPortInfo SerialPortI;
     private readonly SerialPort _serialPort;
     
-    public PiShockSerial(IntensityRange intensityRange, DurationRange durationRange, DeviceApi apiType, SerialPortInfo serialPortI, ILogger? logger = null) : base(intensityRange, durationRange, apiType, logger)
+    public PiShockSerial(DeviceApi apiType, SerialPortInfo serialPortI, ILogger? logger = null) : base(apiType, logger)
     {
         this.SerialPortI = serialPortI;
         this._serialPort = new SerialPort(this.SerialPortI.PortName, BaudRate);

@@ -15,7 +15,7 @@ public class PiShockHttp : PiShockApi
     public string Username, Endpoint, ApiKey;
     protected readonly HttpClient HttpClient = new();
 
-    public PiShockHttp(IntensityRange intensityRange, DurationRange durationRange, string apiKey, string username, string endpoint = "https://do.pishock.com/api/apioperate", ILogger? logger = null) : base(intensityRange, durationRange, DeviceApi.PiShockHttp, logger)
+    public PiShockHttp(string apiKey, string username, string endpoint = "https://do.pishock.com/api/apioperate", ILogger? logger = null) : base(DeviceApi.PiShockHttp, logger)
     {
         this.Username = username;
         this.Endpoint = endpoint;

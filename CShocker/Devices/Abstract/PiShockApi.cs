@@ -6,7 +6,7 @@ namespace CShocker.Devices.Abstract;
 
 public abstract class PiShockApi : Api
 {
-    protected PiShockApi(IntensityRange intensityRange, DurationRange durationRange, DeviceApi apiType, ILogger? logger = null) : base(intensityRange, durationRange, apiType, logger)
+    protected PiShockApi(DeviceApi apiType, ILogger? logger = null) : base(apiType, new IntegerRange(0, 100), new IntegerRange(1000, 15000), logger)
     {
     }
 }

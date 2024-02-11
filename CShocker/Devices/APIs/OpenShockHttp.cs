@@ -58,7 +58,7 @@ public class OpenShockHttp : OpenShockApi
         };
     }
 
-    public OpenShockHttp(IntensityRange intensityRange, DurationRange durationRange, string apiKey, string endpoint = "https://api.shocklink.net", ILogger? logger = null) : base(intensityRange, durationRange, DeviceApi.OpenShockHttp, apiKey, endpoint, logger)
+    public OpenShockHttp(string apiKey, string endpoint = "https://api.shocklink.net", ILogger? logger = null) : base(DeviceApi.OpenShockHttp, apiKey, endpoint, logger)
     {
     }
 }

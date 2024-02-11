@@ -9,4 +9,14 @@ public readonly struct IntegerRange
         this.Min = min;
         this.Max = max;
     }
+
+    public bool ValueWithinLimits(int value)
+    {
+        return value >= this.Min && value <= this.Max;
+    }
+
+    internal string RangeString()
+    {
+        return $"{this.Min}-{this.Max}";
+    }
 }
