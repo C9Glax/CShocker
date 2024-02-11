@@ -7,11 +7,9 @@ Library to interact with Shock-Collars that are remotely controllable via ESP32-
 
 ```csharp
 public static void Main(string[] args){
-    IntensityRange intensityRange = new IntensityRange(30, 50);
-    DurationRange durationRange = new DurationRange(1000, 2000);
     string apiKey = ":)";
     
-    OpenShockHttp openShockHttp = new (intensityRange, durationRange, apiKey);
+    OpenShockHttp openShockHttp = new (apiKey);
     OpenShockShocker shocker1 = openShockHttp.GetShockers().First();
     shocker1.Control(ControlAction.Vibrate, 20, 1000);
     
@@ -19,7 +17,7 @@ public static void Main(string[] args){
     
     List<SerialPortInfo> serialPorts = SerialHelper.GetSerialPorts();
     int selectedPort = 1;
-    OpenShockSerial openShockSerial = new(intensityRange, durationRange, serialPorts[selectedPort], apiKey);
+    OpenShockSerial openShockSerial = new(serialPorts[selectedPort], apiKey);
     OpenShockShocker shocker2 = openShockSerial.GetShockers().First();
     shocker2.Control(ControlAction.Vibrate, 20, 1000);
     
@@ -28,10 +26,8 @@ public static void Main(string[] args){
 ```
 ## `Shocker.Control`
 ```csharp
-Control(ControlAction action, int? intensity = null, int? duration = null)
+Control(ControlAction action, int intensity, int duration)
 ```
-If `intensity` or `duration` are `null`, a random value within the
-configured range will be used.
 
 
 ### ControlAction
