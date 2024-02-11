@@ -15,7 +15,7 @@ public abstract class Api : IDisposable
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
     private readonly Thread _workQueueThread;
     private const short CommandDelay = 50;
-    public IntegerRange ValidIntensityRange, ValidDurationRange;
+    internal readonly IntegerRange ValidIntensityRange, ValidDurationRange;
     
     internal void Control(ControlAction action, int intensity, int duration, params Shocker[] shockers)
     {
