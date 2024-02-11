@@ -13,7 +13,7 @@ public abstract class Api : IDisposable
     protected ILogger? Logger;
     public readonly DeviceApi ApiType;
     private readonly Queue<ValueTuple<ControlAction, Shocker, int, int>> _queue = new();
-    private bool _workQueue = true;
+    private bool _workOnQueue = true;
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
     private readonly Thread _workQueueThread;
     private const short CommandDelay = 50;
@@ -48,7 +48,7 @@ public abstract class Api : IDisposable
 
     private void QueueThread()
     {
-        while (_workQueue)
+        while (_workOnQueue)
             if (_queue.Count > 0 && _queue.Dequeue() is { } action)
             {
                 this.Logger?.Log(LogLevel.Information, $"{action.Item1} {action.Item2} {action.Item3} {action.Item4}");
@@ -86,6 +86,6 @@ public abstract class Api : IDisposable
 
     public void Dispose()
     {
-        _workQueue = false;
+        _workOnQueue = false;
     }
 }
