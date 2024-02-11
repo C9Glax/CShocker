@@ -2,7 +2,6 @@
 using System.Text;
 using CShocker.Devices.Abstract;
 using CShocker.Devices.Additional;
-using CShocker.Ranges;
 using CShocker.Shockers;
 using CShocker.Shockers.Abstract;
 using Microsoft.Extensions.Logging;
@@ -11,8 +10,6 @@ namespace CShocker.Devices.APIs;
 
 public class OpenShockHttp : OpenShockApi
 {
-    
-    
     protected override void ControlInternal(ControlAction action, Shocker shocker, int intensity, int duration)
     {
         if (shocker is not OpenShockShocker openShockShocker)

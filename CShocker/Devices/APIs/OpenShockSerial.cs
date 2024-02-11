@@ -1,7 +1,6 @@
 ﻿using System.IO.Ports;
 using CShocker.Devices.Abstract;
 using CShocker.Devices.Additional;
-using CShocker.Ranges;
 using CShocker.Shockers;
 using CShocker.Shockers.Abstract;
 using Microsoft.Extensions.Logging;
