@@ -1,6 +1,4 @@
-﻿using System.Net.Http.Headers;
-using System.Text;
-using CShocker.Devices.Abstract;
+﻿using CShocker.Devices.Abstract;
 using CShocker.Devices.Additional;
 using CShocker.Shockers;
 using CShocker.Shockers.Abstract;
@@ -12,7 +10,6 @@ public class PiShockHttp : PiShockApi
 {
     // ReSharper disable twice MemberCanBePrivate.Global external usage
     public string Username, Endpoint, ApiKey;
-    protected readonly HttpClient HttpClient = new();
 
     public PiShockHttp(string apiKey, string username, string endpoint = "https://do.pishock.com/api/apioperate", ILogger? logger = null) : base(DeviceApi.PiShockHttp, logger)
     {
@@ -28,27 +25,18 @@ public class PiShockHttp : PiShockApi
             this.Logger?.Log(LogLevel.Warning, $"Shocker {shocker} is not {typeof(OpenShockShocker).FullName}");
             return;
         }
-        
-        HttpRequestMessage request = new (HttpMethod.Post, $"{Endpoint}")
-        {
-            Headers =
-            {
-                UserAgent = { new ProductInfoHeaderValue("CShocker", "1") },
-                Accept = { new MediaTypeWithQualityHeaderValue("text/plain") }
-            },
-            Content = new StringContent("{" +
-                                        $"\"Username\":\"{Username}\"," +
-                                        "\"Name\":\"CShocker\"," +
-                                        $"\"Code\":\"{piShockShocker.Code}\"," +
-                                        $"\"Intensity\":\"{intensity}\"," +
-                                        $"\"Duration\":\"{duration/1000}\"," + //duration is in seconds no ms
-                                        $"\"Apikey\":\"{ApiKey}\"," +
-                                        $"\"Op\":\"{ControlActionToByte(action)}\"" +
-                                        "}", Encoding.UTF8, new MediaTypeHeaderValue("application/json"))
-        };
-        HttpResponseMessage response = HttpClient.Send(request);
-        this.Logger?.Log(!response.IsSuccessStatusCode ? LogLevel.Error : LogLevel.Debug,
-            $"{request.RequestUri} response: {response.StatusCode}");
+
+        string json = "{" +
+                      $"\"Username\":\"{Username}\"," +
+                      "\"Name\":\"CShocker\"," +
+                      $"\"Code\":\"{piShockShocker.Code}\"," +
+                      $"\"Intensity\":\"{intensity}\"," +
+                      $"\"Duration\":\"{duration / 1000}\"," + //duration is in seconds no ms
+                      $"\"Apikey\":\"{ApiKey}\"," +
+                      $"\"Op\":\"{ControlActionToByte(action)}\"" +
+                      "}";
+
+        ApiHttpClient.MakeAPICall(HttpMethod.Post, $"{Endpoint}", json, this.Logger);
     }
     
     private byte ControlActionToByte(ControlAction action)

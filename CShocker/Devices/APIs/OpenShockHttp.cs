@@ -1,6 +1,4 @@
-﻿using System.Net.Http.Headers;
-using System.Text;
-using CShocker.Devices.Abstract;
+﻿using CShocker.Devices.Abstract;
 using CShocker.Devices.Additional;
 using CShocker.Shockers;
 using CShocker.Shockers.Abstract;
@@ -18,30 +16,19 @@ public class OpenShockHttp : OpenShockApi
             return;
         }
 
-        HttpRequestMessage request = new (HttpMethod.Post, $"{Endpoint}/2/shockers/control")
-        {
-            Headers =
-            {
-                UserAgent = { new ProductInfoHeaderValue("CShocker", "1") },
-                Accept = { new MediaTypeWithQualityHeaderValue("application/json") }
-            },
-            Content = new StringContent("{" +
-                                        "  \"shocks\": [" +
-                                        "    {" +
-                                        $"      \"id\": \"{openShockShocker.id}\"," +
-                                        $"      \"type\": {ControlActionToByte(action)}," +
-                                        $"      \"intensity\": {intensity}," +
-                                        $"      \"duration\": {duration}" +
-                                        "    }" +
-                                        "  ]," +
-                                        "  \"customName\": \"CShocker\"" +
-                                        "}", Encoding.UTF8, new MediaTypeHeaderValue("application/json"))
-        };
-        request.Headers.Add("OpenShockToken", ApiKey);
-        this.Logger?.Log(LogLevel.Debug, $"Request-Content: {request.Content.ReadAsStringAsync().Result}");
-        HttpResponseMessage response = HttpClient.Send(request);
-        this.Logger?.Log(!response.IsSuccessStatusCode ? LogLevel.Error : LogLevel.Debug,
-            $"{request.RequestUri} response: {response.StatusCode}");
+        string json = "{" +
+                      "  \"shocks\": [" +
+                      "    {" +
+                      $"      \"id\": \"{openShockShocker.id}\"," +
+                      $"      \"type\": {ControlActionToByte(action)}," +
+                      $"      \"intensity\": {intensity}," +
+                      $"      \"duration\": {duration}" +
+                      "    }" +
+                      "  ]," +
+                      "  \"customName\": \"CShocker\"" +
+                      "}";
+        
+        ApiHttpClient.MakeAPICall(HttpMethod.Post, $"{Endpoint}/2/shockers/control", json, this.Logger, new ValueTuple<string, string>("OpenShockToken", ApiKey));
     }
 
     private byte ControlActionToByte(ControlAction action)
