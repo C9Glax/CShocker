@@ -16,6 +16,11 @@ public readonly struct IntegerRange
         return value >= this.Min && value <= this.Max;
     }
 
+    public int RandomValueWithinLimits()
+    {
+        return Random.Shared.Next(this.Min, this.Max);
+    }
+
     internal string RangeString()
     {
         return $"{this.Min}-{this.Max}";
