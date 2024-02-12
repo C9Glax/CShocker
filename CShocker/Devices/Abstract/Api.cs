@@ -25,12 +25,12 @@ public abstract class Api : IDisposable
             this.Logger?.Log(LogLevel.Information, "No action defined.");
             enqueueItem = false;
         }
-        if (!ValidIntensityRange.ValueWithinLimits(intensity))
+        if (!ValidIntensityRange.IsValueWithinLimits(intensity))
         {
             this.Logger?.Log(LogLevel.Information, $"Value not within allowed {nameof(intensity)}-Range ({ValidIntensityRange.RangeString()}): {intensity}");
             enqueueItem = false;
         }
-        if (!ValidDurationRange.ValueWithinLimits(duration))
+        if (!ValidDurationRange.IsValueWithinLimits(duration))
         {
             this.Logger?.Log(LogLevel.Information, $"Value not within allowed {nameof(duration)}-Range ({ValidIntensityRange.RangeString()}): {duration}");
             enqueueItem = false;

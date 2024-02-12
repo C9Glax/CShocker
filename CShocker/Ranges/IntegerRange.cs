@@ -11,7 +11,7 @@ public readonly struct IntegerRange
         this.Max = max;
     }
 
-    public bool ValueWithinLimits(int value)
+    public bool IsValueWithinLimits(int value)
     {
         return value >= this.Min && value <= this.Max;
     }
