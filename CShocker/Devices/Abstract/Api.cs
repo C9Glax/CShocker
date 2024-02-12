@@ -42,7 +42,7 @@ public abstract class Api : IDisposable
         }
         foreach (Shocker shocker in shockers)
         {
-            this.Logger?.Log(LogLevel.Debug, $"Enqueueing {action} {intensity} {duration}");
+            this.Logger?.Log(LogLevel.Debug, $"Enqueueing {action} Intensity: {intensity} Duration: {duration}\nShocker:\n{shocker}");
             _queue.Enqueue(new(action, shocker, intensity, duration));
         }
     }
@@ -64,7 +64,7 @@ public abstract class Api : IDisposable
         while (_workOnQueue)
             if (_queue.Count > 0 && _queue.Dequeue() is { } action)
             {
-                this.Logger?.Log(LogLevel.Information, $"{action.Item1} {action.Item2} {action.Item3} {action.Item4}");
+                this.Logger?.Log(LogLevel.Information, $"Executing: {Enum.GetName(action.Item1)} Intensity: {action.Item3} Duration: {action.Item4}\nShocker:\n{action.Item2.ToString()}");
                 ControlInternal(action.Item1, action.Item2, action.Item3, action.Item4);
                 Thread.Sleep(action.Item4 + CommandDelay);
             }

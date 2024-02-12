@@ -32,14 +32,15 @@ public class OpenShockShocker : Shocker
 
     public override string ToString()
     {
-        return $"{string.Join("\n\t",
-            $"{GetType().Name}",
-            $"Name: {Name}",
-            $"ID: {ID}",
-            $"RF-ID: {RfId}",
-            $"Model: {Enum.GetName(Model)}",
-            $"Created On: {CreatedOn}",
-            $"Paused: {IsPaused}")}" +
+        const int tabWidth = -12;
+        return $"\t{string.Join("\n\t",
+            $"\u251c {"Type",tabWidth}: {GetType().Name}",
+            $"\u251c {"Name",tabWidth}: {Name}",
+            $"\u251c {"ID",tabWidth}: {ID}",
+            $"\u251c {"RF-ID",tabWidth}: {RfId}",
+            $"\u251c {"Model",tabWidth}: {Enum.GetName(Model)}",
+            $"\u251c {"Created On",tabWidth}: {CreatedOn}",
+            $"\u2514 {"Paused",tabWidth}: {IsPaused}")}" +
                $"\n\r";
     }
 

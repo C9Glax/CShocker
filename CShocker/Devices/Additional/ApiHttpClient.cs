@@ -26,18 +26,19 @@ public static class ApiHttpClient
                 new StringContent(jsonContent, Encoding.UTF8, new MediaTypeHeaderValue("application/json"));
         foreach ((string, string) customHeader in customHeaders)
             request.Headers.Add(customHeader.Item1, customHeader.Item2);
-        logger?.Log(LogLevel.Debug, $"Request: \n" +
-                                    $"-URI: {request.RequestUri}\n" +
-                                    $"-Headers: \n\t{string.Join("\n\t", request.Headers.Select(h => $"{h.Key} {string.Join(", ", h.Value)}"))}\n" +
-                                    $"-Content: {request.Content?.ReadAsStringAsync().Result}");
+        logger?.Log(LogLevel.Debug, string.Join("\n\t",
+                "Request:",
+                $"\u251c\u2500\u2500 URI: {request.RequestUri}",
+                $"\u251c\u2500\u2510 Headers: {string.Concat(request.Headers.Select(h => $"\n\t\u2502 {(request.Headers.Last().Key.Equals(h.Key) ? "\u2514" : "\u251c")} {h.Key}: {string.Join(", ", h.Value)}"))}", 
+                $"\u2514\u2500\u2500 Content: {request.Content?.ReadAsStringAsync().Result}"));
 
         HttpClient httpClient = new();
         HttpResponseMessage response = httpClient.Send(request);
-        logger?.Log(!response.IsSuccessStatusCode ? LogLevel.Error : LogLevel.Debug,
-            $"Response: \n" +
-                        $"-URI: {request.RequestUri}\n" +
-                        $"-Headers: \n\t{string.Join("\n\t", response.Headers.Select(h => $"{h.Key} {string.Join(", ", h.Value)}"))}\n" +
-                        $"-Content: {response.Content?.ReadAsStringAsync().Result}");
+        logger?.Log(!response.IsSuccessStatusCode ? LogLevel.Error : LogLevel.Debug, string.Join("\n\t",
+            "Request:",
+            $"\u251c\u2500\u2500 URI: {request.RequestUri}",
+            $"\u251c\u2500\u2510 Headers: {string.Concat(response.Headers.Select(h => $"\n\t\u2502 {(response.Headers.Last().Key.Equals(h.Key) ? "\u2514" : "\u251c")} {h.Key}: {string.Join(", ", h.Value)}"))}", 
+            $"\u2514\u2500\u2500 Content: {response.Content?.ReadAsStringAsync().Result}"));
         httpClient.Dispose();
         return response;
     }

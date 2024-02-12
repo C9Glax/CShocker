@@ -7,6 +7,13 @@ public class PiShockShocker : Shocker
 {
     public readonly string Code;
 
+    public PiShockShocker(Api api, string code) : base(api)
+    {
+        if (api is not PiShockApi)
+            throw new Exception($"API-Type {api.GetType().FullName} is not usable with Shocker {this.GetType().FullName}");
+        Code = code;
+    }
+
     public override bool Equals(object? obj)
     {
         return obj is PiShockShocker pss && Equals(pss);
@@ -21,11 +28,13 @@ public class PiShockShocker : Shocker
     {
         return Code.GetHashCode();
     }
-
-    public PiShockShocker(Api api, string code) : base(api)
+    
+    public override string ToString()
     {
-        if (api is not PiShockApi)
-            throw new Exception($"API-Type {api.GetType().FullName} is not usable with Shocker {this.GetType().FullName}");
-        Code = code;
+        const int tabWidth = -5;
+        return $"{string.Join("\n\t",
+            $"\u251c {"Type",tabWidth}: {GetType().Name}",
+            $"\u2514 {"Code",tabWidth}: {Code}")}" +
+               $"\n\r";
     }
 }
