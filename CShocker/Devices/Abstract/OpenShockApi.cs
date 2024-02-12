@@ -8,10 +8,12 @@ namespace CShocker.Devices.Abstract;
 
 public abstract class OpenShockApi : Api
 {
+    // ReSharper disable twice MemberCanBeProtected.Global -> Exposed
     public string Endpoint { get; init; }
     public string ApiKey { get; init; }
     private const string DefaultEndpoint = "https://api.shocklink.net";
 
+    // ReSharper disable once PublicConstructorInAbstractClass -> Exposed
     public OpenShockApi(DeviceApi apiType, string apiKey, string endpoint = DefaultEndpoint, ILogger? logger = null) : base(apiType, new IntegerRange(0, 100), new IntegerRange(300, 30000), logger)
     {
         this.Endpoint = endpoint;
@@ -33,12 +35,13 @@ public abstract class OpenShockApi : Api
         return HashCode.Combine(Endpoint, ApiKey);
     }
 
-    public List<OpenShockShocker> GetShockers()
+    public IEnumerable<OpenShockShocker> GetShockers()
     {
         return GetShockers(this.ApiKey, this, this.Endpoint, this.Logger);
     }
 
-    public static List<OpenShockShocker> GetShockers(string apiKey, OpenShockApi api, string apiEndpoint = DefaultEndpoint, ILogger? logger = null)
+    // ReSharper disable once MemberCanBePrivate.Global
+    public static IEnumerable<OpenShockShocker> GetShockers(string apiKey, OpenShockApi api, string apiEndpoint = DefaultEndpoint, ILogger? logger = null)
     {
         List<OpenShockShocker> shockers = new();
         

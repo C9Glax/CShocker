@@ -5,7 +5,7 @@ namespace CShocker.Shockers;
 
 public class PiShockShocker : Shocker
 {
-    public string Code;
+    public readonly string Code;
 
     public override bool Equals(object? obj)
     {

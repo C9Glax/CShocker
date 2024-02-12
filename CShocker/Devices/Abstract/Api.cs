@@ -7,7 +7,7 @@ namespace CShocker.Devices.Abstract;
 
 public abstract class Api : IDisposable
 {
-    // ReSharper disable 4 times MemberCanBePrivate.Global external use
+    // ReSharper disable 4 times MemberCanBePrivate.Global -> Exposed
     protected ILogger? Logger;
     public readonly DeviceApi ApiType;
     private readonly Queue<ValueTuple<ControlAction, Shocker, int, int>> _queue = new();

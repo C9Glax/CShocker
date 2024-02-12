@@ -1,7 +1,6 @@
 ﻿using System.IO.Ports;
 using CShocker.Devices.Abstract;
 using CShocker.Devices.Additional;
-using CShocker.Ranges;
 using CShocker.Shockers.Abstract;
 using Microsoft.Extensions.Logging;
 
@@ -10,7 +9,8 @@ namespace CShocker.Devices.APIs;
 public class PiShockSerial : PiShockApi
 {
     private const int BaudRate = 115200;
-    public SerialPortInfo SerialPortI;
+    // ReSharper disable once MemberCanBePrivate.Global -> Exposed
+    public readonly SerialPortInfo SerialPortI;
     private readonly SerialPort _serialPort;
     
     public PiShockSerial(DeviceApi apiType, SerialPortInfo serialPortI, ILogger? logger = null) : base(apiType, logger)

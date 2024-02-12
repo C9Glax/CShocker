@@ -1,7 +1,8 @@
 ﻿namespace CShocker.Devices.Abstract;
 
-public struct SerialPortInfo
+public readonly struct SerialPortInfo
 {
+    // ReSharper disable thrice MemberCanBePrivate.Global -> Exposed
     public readonly string? PortName, Description, Manufacturer, DeviceID;
 
     public SerialPortInfo(string? portName, string? description, string? manufacturer, string? deviceID)

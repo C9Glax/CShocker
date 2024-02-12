@@ -8,8 +8,8 @@ namespace CShocker.Devices.APIs;
 
 public class PiShockHttp : PiShockApi
 {
-    // ReSharper disable twice MemberCanBePrivate.Global external usage
-    public string Username, Endpoint, ApiKey;
+    // ReSharper disable thrice MemberCanBePrivate.Global -> Exposed
+    public readonly string Username, Endpoint, ApiKey;
 
     public PiShockHttp(string apiKey, string username, string endpoint = "https://do.pishock.com/api/apioperate", ILogger? logger = null) : base(DeviceApi.PiShockHttp, logger)
     {

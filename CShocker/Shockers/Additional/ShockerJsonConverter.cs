@@ -22,7 +22,6 @@ public class ShockerJsonConverter : JsonConverter
         {
             return jo.ToObject<PiShockShocker>(serializer)!;
         }
-        throw new Exception();
     }
 
     public override bool CanWrite => false;
@@ -32,6 +31,6 @@ public class ShockerJsonConverter : JsonConverter
     /// </summary>
     public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
     {
-        throw new Exception("Dont call this");
+        throw new NotImplementedException("Dont call this");
     }
 }

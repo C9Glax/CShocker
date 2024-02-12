@@ -1,13 +1,16 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using CShocker.Devices.Abstract;
+﻿using CShocker.Devices.Abstract;
 using CShocker.Shockers.Abstract;
 
 namespace CShocker.Shockers;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 public class OpenShockShocker : Shocker
 {
+    // ReSharper disable thrice MemberCanBePrivate.Global -> Exposed
+    public readonly string Name, ID;
+    public readonly short RfId;
+    public readonly OpenShockModel Model;
+    public readonly DateTime CreatedOn;
+    public readonly bool IsPaused;
     public string name, id;
     public short rfId;
     public OpenShockModel model;

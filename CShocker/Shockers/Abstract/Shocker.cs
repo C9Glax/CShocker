@@ -5,6 +5,7 @@ namespace CShocker.Shockers.Abstract;
 
 public abstract class Shocker : IDisposable
 {
+    // ReSharper disable once MemberCanBePrivate.Global -> Exposed
     public Api Api { get; }
 
     internal Shocker(Api api)

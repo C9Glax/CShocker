@@ -2,6 +2,7 @@
 
 public readonly struct IntegerRange
 {
+    // ReSharper disable twice MemberCanBePrivate.Global -> Exposed
     public readonly int Min, Max;
 
     public IntegerRange(int min, int max)
