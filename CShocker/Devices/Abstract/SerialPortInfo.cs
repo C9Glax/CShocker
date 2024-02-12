@@ -15,7 +15,12 @@ public readonly struct SerialPortInfo
 
     public override string ToString()
     {
-        return
-            $"{GetType().Name}\nPortName: {PortName}\nDescription: {Description}\nManufacturer: {Manufacturer}\nDeviceID: {DeviceID}\n\r";
+        return $"{string.Join("\n\t",
+            $"{GetType().Name}",
+            $"PortName: {PortName}",
+            $"Description: {Description}",
+            $"Manufacturer: {Manufacturer}",
+            $"DeviceID: {DeviceID}")}" +
+               $"\n\r";
     }
 }
