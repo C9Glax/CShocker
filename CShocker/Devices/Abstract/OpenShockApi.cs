@@ -27,7 +27,7 @@ public abstract class OpenShockApi : Api
 
     private bool Equals(OpenShockApi other)
     {
-        return base.Equals(other) && Endpoint == other.Endpoint && ApiKey == other.ApiKey;
+        return base.Equals(other) && Endpoint.Equals(other.Endpoint) && ApiKey.Equals(other.ApiKey);
     }
 
     public override int GetHashCode()

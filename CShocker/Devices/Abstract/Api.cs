@@ -92,7 +92,7 @@ public abstract class Api : IDisposable
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(ApiType);
+        return ApiType.GetHashCode();
     }
 
     public void Dispose()
