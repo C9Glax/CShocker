@@ -12,9 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="GlaxLogger">
-        <HintPath>..\..\GlaxLogger\GlaxLogger\bin\Debug\net7.0\GlaxLogger.dll</HintPath>
-      </Reference>
+      <PackageReference Include="GlaxLogger" Version="1.0.6" />
     </ItemGroup>
 
 </Project>
