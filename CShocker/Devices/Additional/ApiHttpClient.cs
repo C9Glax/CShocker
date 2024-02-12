@@ -26,14 +26,18 @@ public static class ApiHttpClient
                 new StringContent(jsonContent, Encoding.UTF8, new MediaTypeHeaderValue("application/json"));
         foreach ((string, string) customHeader in customHeaders)
             request.Headers.Add(customHeader.Item1, customHeader.Item2);
-        logger?.Log(LogLevel.Debug, $"Request-URI: {request.RequestUri}\n\r" +
-                                         $"Request-Headers: \n\t{string.Join("\n\t", request.Headers.Select(h => $"{h.Key} {string.Join(", ", h.Value)}"))}\n\r" +
-                                         $"Request-Content: {request.Content?.ReadAsStringAsync().Result}");
+        logger?.Log(LogLevel.Debug, $"Request: \n" +
+                                    $"-URI: {request.RequestUri}\n" +
+                                    $"-Headers: \n\t{string.Join("\n\t", request.Headers.Select(h => $"{h.Key} {string.Join(", ", h.Value)}"))}\n" +
+                                    $"-Content: {request.Content?.ReadAsStringAsync().Result}");
 
         HttpClient httpClient = new();
         HttpResponseMessage response = httpClient.Send(request);
         logger?.Log(!response.IsSuccessStatusCode ? LogLevel.Error : LogLevel.Debug,
-            $"{request.RequestUri} response: {response.StatusCode}");
+            $"Response: \n" +
+                        $"-URI: {request.RequestUri}\n" +
+                        $"-Headers: \n\t{string.Join("\n\t", response.Headers.Select(h => $"{h.Key} {string.Join(", ", h.Value)}"))}\n" +
+                        $"-Content: {response.Content?.ReadAsStringAsync().Result}");
         httpClient.Dispose();
         return response;
     }
