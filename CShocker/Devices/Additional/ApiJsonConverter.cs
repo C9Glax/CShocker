@@ -26,7 +26,7 @@ public class ApiJsonConverter : JsonConverter
             case DeviceApi.PiShockHttp:
                 return jo.ToObject<PiShockHttp>()!;
             case DeviceApi.PiShockSerial:
-                throw new NotImplementedException();
+                return jo.ToObject<PiShockSerial>()!;
             default:
                 throw new Exception();
         }
