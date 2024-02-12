@@ -36,8 +36,8 @@ public class OpenShockSerial : OpenShockApi
             return;
         }
         string json = "rftransmit {" +
-                        $"\"model\":\"{Enum.GetName(openShockShocker.model)!.ToLower()}\"," +
-                        $"\"id\":{openShockShocker.rfId}," +
+                        $"\"model\":\"{Enum.GetName(openShockShocker.Model)!.ToLower()}\"," +
+                        $"\"id\":{openShockShocker.RfId}," +
                         $"\"type\":\"{ControlActionToString(action)}\"," +
                         $"\"intensity\":{intensity}," +
                         $"\"durationMs\":{duration}" +

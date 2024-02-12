@@ -19,7 +19,7 @@ public class OpenShockHttp : OpenShockApi
         string json = "{" +
                       "  \"shocks\": [" +
                       "    {" +
-                      $"      \"id\": \"{openShockShocker.id}\"," +
+                      $"      \"id\": \"{openShockShocker.ID}\"," +
                       $"      \"type\": {ControlActionToByte(action)}," +
                       $"      \"intensity\": {intensity}," +
                       $"      \"duration\": {duration}" +

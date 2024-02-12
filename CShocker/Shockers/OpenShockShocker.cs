@@ -11,22 +11,17 @@ public class OpenShockShocker : Shocker
     public readonly OpenShockModel Model;
     public readonly DateTime CreatedOn;
     public readonly bool IsPaused;
-    public string name, id;
-    public short rfId;
-    public OpenShockModel model;
-    public DateTime createdOn;
-    public bool isPaused;
 
     public OpenShockShocker(Api api, string name, string id, short rfId, OpenShockModel model, DateTime createdOn, bool isPaused) : base (api)
     {
         if (api is not OpenShockApi)
             throw new Exception($"API-Type {api.GetType().FullName} is not usable with Shocker {this.GetType().FullName}");
-        this.name = name;
-        this.id = id;
-        this.rfId = rfId;
-        this.model = model;
-        this.createdOn = createdOn;
-        this.isPaused = isPaused;
+        this.Name = name;
+        this.ID = id;
+        this.RfId = rfId;
+        this.Model = model;
+        this.CreatedOn = createdOn;
+        this.IsPaused = isPaused;
     }
 
     public enum OpenShockModel : byte
@@ -37,13 +32,15 @@ public class OpenShockShocker : Shocker
 
     public override string ToString()
     {
-        return $"{GetType().Name}\n" +
-               $"Name: {name}\n" +
-               $"ID: {id}\n" +
-               $"RF-ID: {rfId}\n" +
-               $"Model: {Enum.GetName(model)}\n" +
-               $"Created On: {createdOn}\n" +
-               $"Paused: {isPaused}\n\r";
+        return $"{string.Join("\n\t",
+            $"{GetType().Name}",
+            $"Name: {Name}",
+            $"ID: {ID}",
+            $"RF-ID: {RfId}",
+            $"Model: {Enum.GetName(Model)}",
+            $"Created On: {CreatedOn}",
+            $"Paused: {IsPaused}")}" +
+               $"\n\r";
     }
 
     public override bool Equals(object? obj)
@@ -54,11 +51,11 @@ public class OpenShockShocker : Shocker
 
     private bool Equals(OpenShockShocker other)
     {
-        return id == other.id && rfId == other.rfId && model == other.model && createdOn.Equals(other.createdOn);
+        return ID == other.ID;
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(id, rfId, (int)model, createdOn);
+        return ID.GetHashCode();
     }
 }
