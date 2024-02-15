@@ -14,7 +14,7 @@ public class ShockerJsonConverter : JsonConverter
     public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
     {
         JObject jo = JObject.Load(reader);
-        if (jo.ContainsKey("model")) //OpenShockShocker
+        if (jo.ContainsKey("Model")) //OpenShockShocker
         {
             return jo.ToObject<OpenShockShocker>(serializer)!;
         }
