@@ -11,7 +11,7 @@ public abstract class OpenShockApi : Api
     // ReSharper disable twice MemberCanBeProtected.Global -> Exposed
     public string Endpoint { get; init; }
     public string ApiKey { get; init; }
-    private const string DefaultEndpoint = "https://api.openshock.app";
+    public const string DefaultEndpoint = "https://api.openshock.app";
 
     // ReSharper disable once PublicConstructorInAbstractClass -> Exposed
     public OpenShockApi(DeviceApi apiType, string apiKey, string endpoint = DefaultEndpoint, ILogger? logger = null) : base(apiType, new IntegerRange(0, 100), new IntegerRange(300, 30000), logger)
