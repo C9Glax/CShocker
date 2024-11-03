@@ -16,14 +16,16 @@ while(apiKey is null || apiKey.Length < 1)
 OpenShockHttp openShockHttp = new (apiKey, logger: logger);
 OpenShockShocker shocker = openShockHttp.GetShockers().First();
 shocker.Control(ControlAction.Vibrate, 20, 1000);
+Thread.Sleep(1100);
 
+/*
 File.WriteAllText("shockers.json", JsonConvert.SerializeObject(shocker));
 OpenShockShocker deserialized = JsonConvert.DeserializeObject<OpenShockShocker>(File.ReadAllText("shockers.json"), new ApiJsonConverter())!;
 Thread.Sleep(1100); //Wait for previous to end
 deserialized.Control(ControlAction.Vibrate, 20, 1000);
 shocker.Dispose();
 deserialized.Dispose();
-
+*/
 
 /*
 #pragma warning disable CA1416
