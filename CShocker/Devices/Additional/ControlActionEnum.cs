@@ -5,5 +5,5 @@ public enum ControlAction
     Beep,
     Vibrate,
     Shock,
-    Nothing
+    Stop
 }

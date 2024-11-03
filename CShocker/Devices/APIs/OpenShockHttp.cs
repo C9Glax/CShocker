@@ -20,7 +20,7 @@ public class OpenShockHttp : OpenShockApi
                       "  \"shocks\": [" +
                       "    {" +
                       $"      \"id\": \"{openShockShocker.ID}\"," +
-                      $"      \"type\": {ControlActionToByte(action)}," +
+                      $"      \"type\": \"{Enum.GetName(action)}\"," +
                       $"      \"intensity\": {intensity}," +
                       $"      \"duration\": {duration}" +
                       "    }" +
@@ -29,17 +29,6 @@ public class OpenShockHttp : OpenShockApi
                       "}";
         
         ApiHttpClient.MakeAPICall(HttpMethod.Post, $"{Endpoint}/2/shockers/control", json, this.Logger, new ValueTuple<string, string>("OpenShockToken", ApiKey));
-    }
-
-    private byte ControlActionToByte(ControlAction action)
-    {
-        return action switch
-        {
-            ControlAction.Beep => 3,
-            ControlAction.Vibrate => 2,
-            ControlAction.Shock => 1,
-            _ => 0
-        };
     }
 
     public OpenShockHttp(string apiKey, string endpoint = "https://api.shocklink.net", ILogger? logger = null) : base(DeviceApi.OpenShockHttp, apiKey, endpoint, logger)

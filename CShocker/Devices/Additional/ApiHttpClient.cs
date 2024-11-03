@@ -18,12 +18,15 @@ public static class ApiHttpClient
             Headers =
             {
                 UserAgent = { userAgent },
-                Accept = { new MediaTypeWithQualityHeaderValue("application/json") }
+                Accept = { new MediaTypeWithQualityHeaderValue("application/json") },
+                
             }
         };
         if (jsonContent is not null && jsonContent.Length > 0)
-            request.Content =
-                new StringContent(jsonContent, Encoding.UTF8, new MediaTypeHeaderValue("application/json"));
+            request.Content = new ByteArrayContent(Encoding.UTF8.GetBytes(jsonContent))
+            {
+                Headers = { ContentType = MediaTypeHeaderValue.Parse("application/json") }
+            };
         foreach ((string, string) customHeader in customHeaders)
             request.Headers.Add(customHeader.Item1, customHeader.Item2);
         logger?.Log(LogLevel.Debug, string.Join("\n\t",

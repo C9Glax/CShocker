@@ -20,11 +20,6 @@ public abstract class Api : IDisposable
     internal void Control(ControlAction action, int intensity, int duration, params Shocker[] shockers)
     {
         bool enqueueItem = true;
-        if (action is ControlAction.Nothing)
-        {
-            this.Logger?.Log(LogLevel.Information, "No action defined.");
-            enqueueItem = false;
-        }
         if (!ValidIntensityRange.IsValueWithinLimits(intensity))
         {
             this.Logger?.Log(LogLevel.Information, $"Value not within allowed {nameof(intensity)}-Range ({ValidIntensityRange.RangeString()}): {intensity}");
