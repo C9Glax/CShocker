@@ -10,10 +10,9 @@ public abstract class Api : IDisposable
     // ReSharper disable 4 times MemberCanBePrivate.Global -> Exposed
     protected ILogger? Logger;
     public readonly DeviceApi ApiType;
-    private readonly Queue<ValueTuple<ControlAction, Shocker, int, int>> _queue = new();
-    private bool _workOnQueue = true;
+    private Queue<DateTime> order = new();
+    private Dictionary<DateTime, Task> tasks = new();
     // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
-    private readonly Thread _workQueueThread;
     private const short CommandDelay = 50;
     internal readonly IntegerRange ValidIntensityRange, ValidDurationRange;
     
@@ -38,7 +37,12 @@ public abstract class Api : IDisposable
         foreach (Shocker shocker in shockers)
         {
             this.Logger?.Log(LogLevel.Debug, $"Enqueueing {action} Intensity: {intensity} Duration: {duration}\nShocker:\n{shocker}");
-            _queue.Enqueue(new(action, shocker, intensity, duration));
+            ValueTuple<ControlAction, Shocker, int, int> tuple = new(action, shocker, intensity, duration);
+            DateTime now = DateTime.Now;
+            Task t = new (() => ExecuteTask(now, tuple));
+            order.Enqueue(now);
+            tasks.Add(now, t);
+            t.Start();
         }
     }
     
@@ -50,19 +54,17 @@ public abstract class Api : IDisposable
         this.Logger = logger;
         this.ValidIntensityRange = validIntensityRange;
         this.ValidDurationRange = validDurationRange;
-        this._workQueueThread = new Thread(QueueThread);
-        this._workQueueThread.Start();
     }
 
-    private void QueueThread()
+    private void ExecuteTask(DateTime when, ValueTuple<ControlAction, Shocker, int, int> tuple)
     {
-        while (_workOnQueue)
-            if (_queue.Count > 0 && _queue.Dequeue() is { } action)
-            {
-                this.Logger?.Log(LogLevel.Information, $"Executing: {Enum.GetName(action.Item1)} Intensity: {action.Item3} Duration: {action.Item4}\nShocker:\n{action.Item2}");
-                ControlInternal(action.Item1, action.Item2, action.Item3, action.Item4);
-                Thread.Sleep(action.Item4 + CommandDelay);
-            }
+        while (order.First() != when)
+            Thread.Sleep(CommandDelay);
+        this.Logger?.Log(LogLevel.Information, $"Executing: {Enum.GetName(tuple.Item1)} Intensity: {tuple.Item3} Duration: {tuple.Item4}\nShocker:\n{tuple.Item2}");
+        ControlInternal(tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4);
+        Thread.Sleep(tuple.Item4);
+        tasks.Remove(when);
+        order.Dequeue();
     }
 
     public void SetLogger(ILogger? logger)
@@ -92,6 +94,7 @@ public abstract class Api : IDisposable
 
     public void Dispose()
     {
-        _workOnQueue = false;
+        foreach ((DateTime when, Task? task) in tasks)
+            task?.Dispose();
     }
 }
