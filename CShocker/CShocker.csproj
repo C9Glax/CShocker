@@ -6,7 +6,7 @@
         <Authors>Glax</Authors>
         <RepositoryUrl>https://github.com/C9Glax/CShocker</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <Version>3.0.1</Version>
+        <Version>3.0.2</Version>
         <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <LangVersion>latestmajor</LangVersion>
         <PackageProjectUrl>https://github.com/C9Glax/CShocker</PackageProjectUrl>
