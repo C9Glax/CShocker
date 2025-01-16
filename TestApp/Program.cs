@@ -16,6 +16,8 @@ OpenShockHttp openShockHttp = new (apiKey, logger: logger);
 foreach (OpenShockShocker shocker in openShockHttp.GetShockers())
 {
     shocker.Control(ControlAction.Vibrate, 20, 1000);
+    shocker.Control(ControlAction.Vibrate, 20, 1000);
+    shocker.Control(ControlAction.Vibrate, 20, 1000);
     Thread.Sleep(1100);
 }
 
@@ -55,3 +57,6 @@ OpenShockShocker deserialized = JsonConvert.DeserializeObject<OpenShockShocker>(
 shocker.Dispose();
 deserialized.Dispose();
 */
+
+while(!Console.KeyAvailable)
+    Thread.Sleep(100);
