@@ -31,7 +31,7 @@ public class OpenShockHttp : OpenShockApi
         ApiHttpClient.MakeAPICall(HttpMethod.Post, $"{Endpoint}/2/shockers/control", json, this.Logger, new ValueTuple<string, string>("OpenShockToken", ApiKey));
     }
 
-    public OpenShockHttp(string apiKey, string endpoint = "https://api.shocklink.net", ILogger? logger = null) : base(DeviceApi.OpenShockHttp, apiKey, endpoint, logger)
+    public OpenShockHttp(string apiKey, string endpoint = "https://api.shocklink.app", ILogger? logger = null) : base(DeviceApi.OpenShockHttp, apiKey, endpoint, logger)
     {
     }
 }
