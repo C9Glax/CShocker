@@ -8,16 +8,30 @@ namespace CShocker.Devices.Additional;
 
 public static class ApiHttpClient
 {
-    internal static HttpResponseMessage MakeAPICall(HttpMethod method, string uri, string? jsonContent, ILogger? logger = null, params ValueTuple<string, string>[] customHeaders)
+    private static readonly ProductInfoHeaderValue UserAgent = GetUserAgent();
+
+    private static ProductInfoHeaderValue GetUserAgent()
     {
         Assembly assembly = Assembly.GetExecutingAssembly();
+        if (assembly.Location == String.Empty)
+        {
+            DirectoryInfo dir = new (AppContext.BaseDirectory);
+            FileInfo? f = dir.GetFiles("*.exe").FirstOrDefault();
+            if (f is null)
+                return new("CShocker", "Release");
+            assembly = Assembly.LoadFrom(f.FullName);
+        }
         FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-        ProductInfoHeaderValue userAgent = new (fvi.ProductName ?? fvi.FileName, fvi.ProductVersion);
+        return new (fvi.ProductName ?? fvi.FileName, fvi.ProductVersion);
+    }
+    
+    internal static HttpResponseMessage MakeAPICall(HttpMethod method, string uri, string? jsonContent, ILogger? logger = null, params ValueTuple<string, string>[] customHeaders)
+    {
         HttpRequestMessage request = new (method, uri)
         {
             Headers =
             {
-                UserAgent = { userAgent },
+                UserAgent = { UserAgent },
                 Accept = { new MediaTypeWithQualityHeaderValue("application/json") },
                 
             }
