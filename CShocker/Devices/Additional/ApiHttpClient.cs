@@ -38,10 +38,10 @@ public static class ApiHttpClient
         HttpClient httpClient = new();
         HttpResponseMessage response = httpClient.Send(request);
         logger?.Log(!response.IsSuccessStatusCode ? LogLevel.Error : LogLevel.Debug, string.Join("\n\t",
-            "Request:",
+            "Response:",
             $"\u251c\u2500\u2500 URI: {request.RequestUri}",
             $"\u251c\u2500\u2510 Headers: {string.Concat(response.Headers.Select(h => $"\n\t\u2502 {(response.Headers.Last().Key.Equals(h.Key) ? "\u2514" : "\u251c")} {h.Key}: {string.Join(", ", h.Value)}"))}", 
-            $"\u2514\u2500\u2500 Content: {response.Content?.ReadAsStringAsync().Result}"));
+            $"\u2514\u2500\u2500 Content: {response.Content.ReadAsStringAsync().Result}"));
         httpClient.Dispose();
         return response;
     }

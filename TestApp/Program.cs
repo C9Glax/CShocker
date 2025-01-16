@@ -3,7 +3,6 @@ using CShocker.Devices.APIs;
 using CShocker.Shockers;
 using GlaxLogger;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 Logger logger = new (LogLevel.Trace);
 
@@ -14,9 +13,11 @@ while(apiKey is null || apiKey.Length < 1)
 
 
 OpenShockHttp openShockHttp = new (apiKey, logger: logger);
-OpenShockShocker shocker = openShockHttp.GetShockers().First();
-shocker.Control(ControlAction.Vibrate, 20, 1000);
-Thread.Sleep(1100);
+foreach (OpenShockShocker shocker in openShockHttp.GetShockers())
+{
+    shocker.Control(ControlAction.Vibrate, 20, 1000);
+    Thread.Sleep(1100);
+}
 
 /*
 File.WriteAllText("shockers.json", JsonConvert.SerializeObject(shocker));
@@ -54,5 +55,3 @@ OpenShockShocker deserialized = JsonConvert.DeserializeObject<OpenShockShocker>(
 shocker.Dispose();
 deserialized.Dispose();
 */
-
-logger.Dispose();
