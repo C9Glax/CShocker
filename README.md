@@ -6,6 +6,8 @@ Library to interact with Shock-Collars that are remotely controllable via ESP32-
 # Usage
 
 ```csharp
+List<(string Owner, string Name, Guid shockerId)> accessibleShockers = OpenShockHttpShocker.GetAccessibleShockers(apiKey);
+
 OpenShockHttpShocker httpShocker = new(shockerId, apiKey);
 httpShocker.Control(ControlAction.Beep, 100, 1000);
 ```
