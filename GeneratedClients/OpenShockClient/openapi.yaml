@@ -1,0 +1,1454 @@
+openapi: 3.0.4
+info:
+  title: OpenShock.API
+  version: "2"
+servers:
+- url: https://api.openshock.app
+- url: https://api.openshock.dev
+tags:
+- description: Shocker management
+  name: Shockers
+- description: Shocker share management
+  name: User Shocker Shares
+- description: Device management
+  name: Hub Management
+- description: For devices (ESP's)
+  name: Hub Endpoints
+- description: User account management
+  name: Account
+paths:
+  /2/account/username/check:
+    post:
+      operationId: Account_CheckUsername
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangeUsernameRequest"
+        description: ""
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/UsernameCheckResponse"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsernameCheckResponse"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/UsernameCheckResponse"
+          description: OK
+      summary: Check if a username is available
+      tags:
+      - Account
+  /2/account/login:
+    post:
+      operationId: Account_LoginV2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginV2"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginV2OkResponse"
+          description: User successfully logged in
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: Invalid username or password
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: Forbidden
+      summary: Authenticate a user
+      tags:
+      - Account
+  /2/account/password-reset:
+    post:
+      operationId: Account_PasswordResetInitiateV2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PasswordResetRequestV2"
+      responses:
+        "200":
+          description: Password reset email sent if the email is associated to an
+            registered account
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: Forbidden
+      summary: Initiate a password reset
+      tags:
+      - Account
+  /2/account/reset-password:
+    post:
+      deprecated: true
+      operationId: Account_PasswordResetInitiateV2Legacy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PasswordResetRequestV2"
+      responses:
+        "200":
+          description: Password reset email sent if the email is associated to an
+            registered account
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: Forbidden
+      summary: "Initiate a password reset. Deprecated: use POST /password-reset instead."
+      tags:
+      - Account
+  /2/account/signup:
+    post:
+      operationId: Account_SignUpV2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignUpV2"
+        description: ""
+      responses:
+        "200":
+          description: User successfully signed up
+        "400":
+          description: Username or email already exists
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: Forbidden
+        "409":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: Conflict
+      summary: Signs up a new user
+      tags:
+      - Account
+  /2/device/assignLCG:
+    get:
+      operationId: Device_GetLiveControlGatewayV2
+      parameters:
+      - explode: true
+        in: query
+        name: version
+        required: false
+        schema:
+          format: int32
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LcgNodeResponseV2"
+          description: Successfully assigned LCG node
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: Bad Request
+        "503":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: Unable to find suitable LCG node
+      security:
+      - HubToken:
+        - AuthenticationSchemes:HubToken
+      summary: Gets the best suited LCG node for the client
+      tags:
+      - Hub Endpoints
+  /2/devices:
+    post:
+      operationId: Devices_CreateDeviceV2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HubCreateRequest"
+      responses:
+        "201":
+          content:
+            text/plain:
+              schema:
+                format: uuid
+                type: string
+          description: Successfully created device
+      security:
+      - UserSessionCookie:
+        - "AuthenticationSchemes:UserSessionCookie,ApiToken"
+      - ApiToken:
+        - "AuthenticationSchemes:UserSessionCookie,ApiToken"
+      summary: Create a new device for the current user
+      tags:
+      - Hub Management
+  /2/shockers/control:
+    post:
+      operationId: Shocker_SendControl
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ControlRequest"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LegacyEmptyResponse"
+          description: The control messages were successfully sent.
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: Forbidden
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: Not Found
+        "412":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: Precondition Failed
+      security:
+      - UserSessionCookie:
+        - "AuthenticationSchemes:UserSessionCookie,ApiToken"
+      - ApiToken:
+        - "AuthenticationSchemes:UserSessionCookie,ApiToken"
+      summary: Send a control message to shockers
+      tags:
+      - Shockers
+  /2/shares/user/invites:
+    post:
+      operationId: UserShares_CreateShareInvite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateShareRequest"
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                format: uuid
+                type: string
+          description: OK
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: Bad Request
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: Not Found
+      security:
+      - UserSessionCookie:
+        - AuthenticationSchemes:UserSessionCookie
+      tags:
+      - User Shocker Shares
+  /2/shares/user:
+    get:
+      operationId: UserShares_GetSharesByUsers
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/V2UserShares"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/V2UserShares"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/V2UserShares"
+          description: OK
+      security:
+      - UserSessionCookie:
+        - AuthenticationSchemes:UserSessionCookie
+      tags:
+      - User Shocker Shares
+  /2/shares/user/invites/outgoing:
+    get:
+      operationId: UserShares_GetOutgoingInvitesList
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ShareInviteBaseDetails"
+                type: array
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ShareInviteBaseDetails"
+                type: array
+            text/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ShareInviteBaseDetails"
+                type: array
+          description: OK
+      security:
+      - UserSessionCookie:
+        - AuthenticationSchemes:UserSessionCookie
+      tags:
+      - User Shocker Shares
+  /2/shares/user/invites/incoming:
+    get:
+      operationId: UserShares_GetIncomingInvitesList
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ShareInviteBaseDetails"
+                type: array
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ShareInviteBaseDetails"
+                type: array
+            text/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ShareInviteBaseDetails"
+                type: array
+          description: OK
+      security:
+      - UserSessionCookie:
+        - AuthenticationSchemes:UserSessionCookie
+      tags:
+      - User Shocker Shares
+  /2/shares/user/invites/outgoing/{inviteId}:
+    delete:
+      operationId: UserShares_DeleteOutgoingInvite
+      parameters:
+      - explode: false
+        in: path
+        name: inviteId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: OK
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: Not Found
+      security:
+      - UserSessionCookie:
+        - AuthenticationSchemes:UserSessionCookie
+      tags:
+      - User Shocker Shares
+  /2/shares/user/invites/incoming/{inviteId}:
+    delete:
+      operationId: UserShares_DenyIncomingInvite
+      parameters:
+      - explode: false
+        in: path
+        name: inviteId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: OK
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: Not Found
+      security:
+      - UserSessionCookie:
+        - AuthenticationSchemes:UserSessionCookie
+      tags:
+      - User Shocker Shares
+    post:
+      operationId: UserShares_RedeemInvite
+      parameters:
+      - description: ""
+        explode: false
+        in: path
+        name: inviteId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/V2UserSharesListItem"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/V2UserSharesListItem"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/V2UserSharesListItem"
+          description: OK
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: Not Found
+      security:
+      - UserSessionCookie:
+        - AuthenticationSchemes:UserSessionCookie
+      summary: Accept a share request and share the shockers with the current user.
+      tags:
+      - User Shocker Shares
+  /2/shares/user/{userId}/shockers/pause:
+    post:
+      operationId: UserShares_BulkPauseUserShareShockers
+      parameters:
+      - explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PauseUserShareShockersRequest"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/PauseUserShareShockersRequest"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/PauseUserShareShockersRequest"
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/PauseUserShareShockersResponse"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PauseUserShareShockersResponse"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/PauseUserShareShockersResponse"
+          description: OK
+      security:
+      - UserSessionCookie:
+        - AuthenticationSchemes:UserSessionCookie
+      tags:
+      - User Shocker Shares
+  /2/shares/user/{userId}/shockers:
+    delete:
+      operationId: UserShares_BulkRemoveUserShareShockers
+      parameters:
+      - explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                format: uuid
+                type: string
+              minItems: 1
+              type: array
+          text/json:
+            schema:
+              items:
+                format: uuid
+                type: string
+              minItems: 1
+              type: array
+          application/*+json:
+            schema:
+              items:
+                format: uuid
+                type: string
+              minItems: 1
+              type: array
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/RemoveUserSharesResponse"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RemoveUserSharesResponse"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/RemoveUserSharesResponse"
+          description: OK
+      security:
+      - UserSessionCookie:
+        - AuthenticationSchemes:UserSessionCookie
+      tags:
+      - User Shocker Shares
+    patch:
+      operationId: UserShares_BulkUserShareShockersUpdate
+      parameters:
+      - description: ""
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BulkUserShareShockersUpdateRequest"
+        description: ""
+      responses:
+        "200":
+          description: Successfully updated share code
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/OpenShockProblem"
+          description: The share code does not exist or you do not have access to
+            it.
+      security:
+      - UserSessionCookie:
+        - AuthenticationSchemes:UserSessionCookie
+      summary: Update user shares for a shocker
+      tags:
+      - User Shocker Shares
+components:
+  schemas:
+    BasicUserInfo:
+      additionalProperties: false
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: name
+        image: https://openapi-generator.tech
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        image:
+          format: uri
+          type: string
+      required:
+      - id
+      - image
+      - name
+      type: object
+    BulkUserShareShockersUpdateRequest:
+      additionalProperties: false
+      example:
+        permissions:
+          vibrate: true
+          sound: true
+          shock: true
+          live: true
+        limits:
+          intensity: 8
+          duration: 39620
+        shockers:
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        permissions:
+          $ref: "#/components/schemas/ShockerPermissions"
+        limits:
+          $ref: "#/components/schemas/ShockerLimits"
+        shockers:
+          items:
+            format: uuid
+            type: string
+          type: array
+      required:
+      - limits
+      - permissions
+      - shockers
+      type: object
+    ChangeUsernameRequest:
+      additionalProperties: false
+      example:
+        username: String
+      properties:
+        username:
+          example: String
+          type: string
+      required:
+      - username
+      type: object
+    Control:
+      additionalProperties: false
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        type: Stop
+        intensity: 8
+        duration: 39620
+        exclusive: true
+      properties:
+        id:
+          format: uuid
+          type: string
+        type:
+          $ref: "#/components/schemas/ControlType"
+        intensity:
+          format: int32
+          maximum: 100
+          minimum: 0
+          type: integer
+        duration:
+          format: int32
+          maximum: 65535
+          minimum: 300
+          type: integer
+        exclusive:
+          type: boolean
+      required:
+      - duration
+      - id
+      - intensity
+      - type
+      type: object
+    ControlRequest:
+      additionalProperties: false
+      example:
+        shocks:
+        - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          type: Stop
+          intensity: 8
+          duration: 39620
+          exclusive: true
+        - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          type: Stop
+          intensity: 8
+          duration: 39620
+          exclusive: true
+        customName: customName
+      properties:
+        shocks:
+          items:
+            $ref: "#/components/schemas/Control"
+          type: array
+        customName:
+          nullable: true
+          type: string
+      required:
+      - shocks
+      type: object
+    ControlType:
+      enum:
+      - Stop
+      - Shock
+      - Vibrate
+      - Sound
+      type: string
+    CreateShareRequest:
+      additionalProperties: false
+      example:
+        shockers:
+        - permissions:
+            vibrate: true
+            sound: true
+            shock: true
+            live: true
+          limits:
+            intensity: 8
+            duration: 39620
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - permissions:
+            vibrate: true
+            sound: true
+            shock: true
+            live: true
+          limits:
+            intensity: 8
+            duration: 39620
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - permissions:
+            vibrate: true
+            sound: true
+            shock: true
+            live: true
+          limits:
+            intensity: 8
+            duration: 39620
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - permissions:
+            vibrate: true
+            sound: true
+            shock: true
+            live: true
+          limits:
+            intensity: 8
+            duration: 39620
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - permissions:
+            vibrate: true
+            sound: true
+            shock: true
+            live: true
+          limits:
+            intensity: 8
+            duration: 39620
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        user: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        shockers:
+          items:
+            $ref: "#/components/schemas/ShockerPermLimitPairWithId"
+          maxItems: 128
+          type: array
+        user:
+          format: uuid
+          nullable: true
+          type: string
+      required:
+      - shockers
+      type: object
+    HubCreateRequest:
+      additionalProperties: false
+      example:
+        name: name
+      properties:
+        name:
+          maxLength: 64
+          minLength: 1
+          type: string
+      required:
+      - name
+      type: object
+    LcgNodeResponseV2:
+      additionalProperties: false
+      example:
+        host: host
+        port: 0
+        path: path
+        country: country
+      properties:
+        host:
+          type: string
+        port:
+          format: int32
+          type: integer
+        path:
+          type: string
+        country:
+          type: string
+      required:
+      - country
+      - host
+      - path
+      - port
+      type: object
+    LegacyEmptyResponse:
+      additionalProperties: false
+      example:
+        message: message
+        data: ""
+      properties:
+        message:
+          type: string
+        data:
+          nullable: true
+      required:
+      - message
+      type: object
+    LoginV2:
+      additionalProperties: false
+      example:
+        password: password
+        usernameOrEmail: usernameOrEmail
+        turnstileResponse: turnstileResponse
+      properties:
+        password:
+          minLength: 1
+          type: string
+        usernameOrEmail:
+          minLength: 1
+          type: string
+        turnstileResponse:
+          maxLength: 2048
+          minLength: 0
+          type: string
+      required:
+      - password
+      - turnstileResponse
+      - usernameOrEmail
+      type: object
+    LoginV2OkResponse:
+      additionalProperties: false
+      example:
+        accountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        accountName: accountName
+        accountEmail: accountEmail
+        isVerified: true
+        profileImage: https://openapi-generator.tech
+        accountRoles:
+        - Support
+        - Support
+      properties:
+        accountId:
+          format: uuid
+          type: string
+        accountName:
+          type: string
+        accountEmail:
+          type: string
+        isVerified:
+          type: boolean
+        profileImage:
+          format: uri
+          type: string
+        accountRoles:
+          items:
+            $ref: "#/components/schemas/RoleType"
+          type: array
+      required:
+      - accountEmail
+      - accountId
+      - accountName
+      - accountRoles
+      - isVerified
+      - profileImage
+      type: object
+    OpenShockProblem:
+      additionalProperties: {}
+      properties:
+        type:
+          nullable: true
+          type: string
+        title:
+          nullable: true
+          type: string
+        status:
+          format: int32
+          nullable: true
+          type: integer
+        detail:
+          nullable: true
+          type: string
+        instance:
+          nullable: true
+          type: string
+        message:
+          deprecated: true
+          readOnly: true
+          type: string
+        traceId:
+          deprecated: true
+          nullable: true
+          readOnly: true
+          type: string
+        requestId:
+          nullable: true
+          readOnly: true
+          type: string
+      type: object
+    PasswordResetRequestV2:
+      additionalProperties: false
+      example:
+        email: user@example.com
+        turnstileResponse: turnstileResponse
+      properties:
+        email:
+          example: user@example.com
+          type: string
+        turnstileResponse:
+          maxLength: 2048
+          minLength: 0
+          type: string
+      required:
+      - email
+      - turnstileResponse
+      type: object
+    PauseUserShareShockersRequest:
+      additionalProperties: false
+      example:
+        shockers:
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        pause: true
+      properties:
+        shockers:
+          items:
+            format: uuid
+            type: string
+          minItems: 1
+          type: array
+        pause:
+          type: boolean
+      required:
+      - pause
+      - shockers
+      type: object
+    PauseUserShareShockersResponse:
+      additionalProperties: false
+      example:
+        affectedRecords: 0
+        pauseStates:
+          key: 6
+      properties:
+        affectedRecords:
+          format: int32
+          type: integer
+        pauseStates:
+          additionalProperties:
+            description: |-
+              An integer representing the reason(s) for the shocker being paused, expressed as a bitfield where reasons are OR'd together.
+
+              Each bit corresponds to:
+              - 1: Shocker
+              - 2: UserShare
+              - 4: PublicShare
+
+              For example, a value of 6 (2 | 4) indicates both 'UserShare' and 'PublicShare' reasons.
+            example: 6
+            title: PauseReason
+            type: integer
+          type: object
+      required:
+      - affectedRecords
+      - pauseStates
+      type: object
+    RemoveUserSharesResponse:
+      additionalProperties: false
+      example:
+        affectedRecords: 0
+      properties:
+        affectedRecords:
+          format: int32
+          type: integer
+      required:
+      - affectedRecords
+      type: object
+    RoleType:
+      enum:
+      - Support
+      - Staff
+      - Admin
+      - System
+      type: string
+    ShareInviteBaseDetails:
+      additionalProperties: false
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        owner:
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          name: name
+          image: https://openapi-generator.tech
+        sharedWith:
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          name: name
+          image: https://openapi-generator.tech
+        shockers:
+        - permissions:
+            vibrate: true
+            sound: true
+            shock: true
+            live: true
+          limits:
+            intensity: 8
+            duration: 39620
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          name: name
+        - permissions:
+            vibrate: true
+            sound: true
+            shock: true
+            live: true
+          limits:
+            intensity: 8
+            duration: 39620
+          id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          name: name
+      properties:
+        id:
+          format: uuid
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        owner:
+          $ref: "#/components/schemas/BasicUserInfo"
+        sharedWith:
+          $ref: "#/components/schemas/BasicUserInfo"
+        shockers:
+          items:
+            $ref: "#/components/schemas/ShockerPermLimitPairWithIdAndName"
+          type: array
+      required:
+      - createdAt
+      - id
+      - owner
+      - sharedWith
+      - shockers
+      type: object
+    ShockerLimits:
+      additionalProperties: false
+      example:
+        intensity: 8
+        duration: 39620
+      properties:
+        intensity:
+          format: int32
+          maximum: 100
+          minimum: 0
+          nullable: true
+          type: integer
+        duration:
+          format: int32
+          maximum: 65535
+          minimum: 300
+          nullable: true
+          type: integer
+      required:
+      - duration
+      - intensity
+      type: object
+    ShockerPermLimitPairWithId:
+      additionalProperties: false
+      example:
+        permissions:
+          vibrate: true
+          sound: true
+          shock: true
+          live: true
+        limits:
+          intensity: 8
+          duration: 39620
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        permissions:
+          $ref: "#/components/schemas/ShockerPermissions"
+        limits:
+          $ref: "#/components/schemas/ShockerLimits"
+        id:
+          format: uuid
+          type: string
+      required:
+      - limits
+      - permissions
+      type: object
+    ShockerPermLimitPairWithIdAndName:
+      additionalProperties: false
+      example:
+        permissions:
+          vibrate: true
+          sound: true
+          shock: true
+          live: true
+        limits:
+          intensity: 8
+          duration: 39620
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: name
+      properties:
+        permissions:
+          $ref: "#/components/schemas/ShockerPermissions"
+        limits:
+          $ref: "#/components/schemas/ShockerLimits"
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+      required:
+      - limits
+      - name
+      - permissions
+      type: object
+    ShockerPermissions:
+      additionalProperties: false
+      example:
+        vibrate: true
+        sound: true
+        shock: true
+        live: true
+      properties:
+        vibrate:
+          type: boolean
+        sound:
+          type: boolean
+        shock:
+          type: boolean
+        live:
+          type: boolean
+      required:
+      - shock
+      - sound
+      - vibrate
+      type: object
+    SignUpV2:
+      additionalProperties: false
+      example:
+        username: String
+        password: user@example.com
+        email: user@example.com
+        turnstileResponse: turnstileResponse
+      properties:
+        username:
+          example: String
+          type: string
+        password:
+          example: user@example.com
+          type: string
+        email:
+          example: user@example.com
+          type: string
+        turnstileResponse:
+          maxLength: 2048
+          minLength: 0
+          type: string
+      required:
+      - email
+      - password
+      - turnstileResponse
+      - username
+      type: object
+    UserShareInfo:
+      additionalProperties: false
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: name
+        createdOn: 2000-01-23T04:56:07.000+00:00
+        permissions:
+          vibrate: true
+          sound: true
+          shock: true
+          live: true
+        limits:
+          intensity: 8
+          duration: 39620
+        paused: 6
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        createdOn:
+          format: date-time
+          type: string
+        permissions:
+          $ref: "#/components/schemas/ShockerPermissions"
+        limits:
+          $ref: "#/components/schemas/ShockerLimits"
+        paused:
+          description: |-
+            An integer representing the reason(s) for the shocker being paused, expressed as a bitfield where reasons are OR'd together.
+
+            Each bit corresponds to:
+            - 1: Shocker
+            - 2: UserShare
+            - 4: PublicShare
+
+            For example, a value of 6 (2 | 4) indicates both 'UserShare' and 'PublicShare' reasons.
+          example: 6
+          title: PauseReason
+          type: integer
+      required:
+      - createdOn
+      - id
+      - limits
+      - name
+      - paused
+      - permissions
+      type: object
+    UsernameAvailability:
+      enum:
+      - Available
+      - Taken
+      - Invalid
+      type: string
+    UsernameCheckResponse:
+      additionalProperties: false
+      example:
+        availability: Available
+        error:
+          message: message
+          type: TooShort
+      properties:
+        availability:
+          $ref: "#/components/schemas/UsernameAvailability"
+        error:
+          $ref: "#/components/schemas/UsernameError"
+      required:
+      - availability
+      type: object
+    UsernameError:
+      additionalProperties: false
+      example:
+        message: message
+        type: TooShort
+      properties:
+        message:
+          type: string
+        type:
+          $ref: "#/components/schemas/UsernameErrorType"
+      required:
+      - message
+      - type
+      type: object
+    UsernameErrorType:
+      enum:
+      - TooShort
+      - TooLong
+      - StartOrEndWithWhitespace
+      - ResembleEmail
+      - ObnoxiousCharacters
+      - Blacklisted
+      type: string
+    V2UserShares:
+      additionalProperties: false
+      example:
+        outgoing:
+        - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          name: name
+          image: https://openapi-generator.tech
+          shares:
+          - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            name: name
+            createdOn: 2000-01-23T04:56:07.000+00:00
+            permissions:
+              vibrate: true
+              sound: true
+              shock: true
+              live: true
+            limits:
+              intensity: 8
+              duration: 39620
+            paused: 6
+          - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            name: name
+            createdOn: 2000-01-23T04:56:07.000+00:00
+            permissions:
+              vibrate: true
+              sound: true
+              shock: true
+              live: true
+            limits:
+              intensity: 8
+              duration: 39620
+            paused: 6
+        - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          name: name
+          image: https://openapi-generator.tech
+          shares:
+          - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            name: name
+            createdOn: 2000-01-23T04:56:07.000+00:00
+            permissions:
+              vibrate: true
+              sound: true
+              shock: true
+              live: true
+            limits:
+              intensity: 8
+              duration: 39620
+            paused: 6
+          - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            name: name
+            createdOn: 2000-01-23T04:56:07.000+00:00
+            permissions:
+              vibrate: true
+              sound: true
+              shock: true
+              live: true
+            limits:
+              intensity: 8
+              duration: 39620
+            paused: 6
+        incoming:
+        - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          name: name
+          image: https://openapi-generator.tech
+          shares:
+          - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            name: name
+            createdOn: 2000-01-23T04:56:07.000+00:00
+            permissions:
+              vibrate: true
+              sound: true
+              shock: true
+              live: true
+            limits:
+              intensity: 8
+              duration: 39620
+            paused: 6
+          - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            name: name
+            createdOn: 2000-01-23T04:56:07.000+00:00
+            permissions:
+              vibrate: true
+              sound: true
+              shock: true
+              live: true
+            limits:
+              intensity: 8
+              duration: 39620
+            paused: 6
+        - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          name: name
+          image: https://openapi-generator.tech
+          shares:
+          - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            name: name
+            createdOn: 2000-01-23T04:56:07.000+00:00
+            permissions:
+              vibrate: true
+              sound: true
+              shock: true
+              live: true
+            limits:
+              intensity: 8
+              duration: 39620
+            paused: 6
+          - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            name: name
+            createdOn: 2000-01-23T04:56:07.000+00:00
+            permissions:
+              vibrate: true
+              sound: true
+              shock: true
+              live: true
+            limits:
+              intensity: 8
+              duration: 39620
+            paused: 6
+      properties:
+        outgoing:
+          items:
+            $ref: "#/components/schemas/V2UserSharesListItem"
+          type: array
+        incoming:
+          items:
+            $ref: "#/components/schemas/V2UserSharesListItem"
+          type: array
+      required:
+      - incoming
+      - outgoing
+      type: object
+    V2UserSharesListItem:
+      additionalProperties: false
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: name
+        image: https://openapi-generator.tech
+        shares:
+        - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          name: name
+          createdOn: 2000-01-23T04:56:07.000+00:00
+          permissions:
+            vibrate: true
+            sound: true
+            shock: true
+            live: true
+          limits:
+            intensity: 8
+            duration: 39620
+          paused: 6
+        - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          name: name
+          createdOn: 2000-01-23T04:56:07.000+00:00
+          permissions:
+            vibrate: true
+            sound: true
+            shock: true
+            live: true
+          limits:
+            intensity: 8
+            duration: 39620
+          paused: 6
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        image:
+          format: uri
+          type: string
+        shares:
+          items:
+            $ref: "#/components/schemas/UserShareInfo"
+          type: array
+      required:
+      - id
+      - image
+      - name
+      - shares
+      type: object
+  securitySchemes:
+    UserSessionCookie:
+      description: Enter user session cookie
+      in: cookie
+      name: openShockSession
+      type: apiKey
+    ApiToken:
+      description: Enter API Token
+      in: header
+      name: OpenShockToken
+      type: apiKey
+    HubToken:
+      description: Enter hub token
+      in: header
+      name: DeviceToken
+      type: apiKey
+
